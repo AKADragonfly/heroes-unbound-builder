@@ -2638,7 +2638,7 @@ ${power.framework === 'Elemental Control' ? `
             const availablePoints = 100 + situationPoints + experiencePoints;
             const remainingPoints = availablePoints - total;
 
-            // Calculate ratio - correct Hero System formula
+            // Calculate ratio - correct Heroes Unbound formula
             const characterHeightenedPoints = characterData.characteristics.reduce((sum, char) => {
                 const calc = calculateCharacteristicCost(char);
                 return sum + calc.heightenedPoints;
