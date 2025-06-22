@@ -1,0 +1,3509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heroes Unbound Build Sheet - VERSION 3.0</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 120px;
+            height: 40px;
+        }
+
+        .toggle-input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #e74c3c;
+            border-radius: 20px;
+            transition: .4s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .toggle-input:checked + .toggle-slider {
+            background: #27ae60;
+        }
+
+        .toggle-input:checked + .toggle-slider span:first-child {
+            opacity: 0.5;
+        }
+
+        .toggle-input:checked + .toggle-slider span:last-child {
+            opacity: 1;
+            font-weight: bold;
+        }
+
+        .toggle-slider span:first-child {
+            opacity: 1;
+            font-weight: bold;
+        }
+
+        .toggle-slider span:last-child {
+            opacity: 0.5;
+        }
+
+        .tab-container {
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        .tab-buttons {
+            display: flex;
+            overflow-x: auto;
+        }
+
+        .tab-button {
+            padding: 15px 25px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1em;
+            color: #6c757d;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+
+        .tab-button:hover {
+            background: #e9ecef;
+            color: #495057;
+        }
+
+        .tab-button.active {
+            color: #3498db;
+            border-bottom-color: #3498db;
+            background: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 30px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+            color: white;
+            padding: 18px 25px;
+            margin: 25px 0 20px 0;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.1em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .data-table th {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            color: white;
+            padding: 15px 10px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .data-table td {
+            padding: 12px 8px;
+            text-align: center;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .data-table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .char-name {
+            font-weight: bold;
+            color: #2c3e50;
+            text-align: left !important;
+            padding-left: 15px !important;
+        }
+
+        .final-value {
+            font-weight: bold;
+            font-size: 0.95em;
+            color: #e74c3c;
+            background-color: #fff5f5;
+            border-radius: 4px;
+        }
+
+        .input-field {
+            width: 100%;
+            max-width: 150px;
+            padding: 6px;
+            border: 2px solid #bdc3c7;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .increase-input {
+            width: 60px;
+        }
+
+        .points-display {
+            font-weight: bold;
+            color: #8e44ad;
+            background-color: #f4f1f7;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+
+        .btn-secondary {
+            background: #8e44ad;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #7d3c98;
+        }
+
+        .btn-add {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-add:hover {
+            background: #219a52;
+        }
+
+        .btn-remove {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-remove:hover {
+            background: #c0392b;
+        }
+
+        .power-group {
+            border: 3px solid #3498db;
+            border-radius: 15px;
+            margin: 20px 0;
+            overflow: hidden;
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .power-group:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.2);
+        }
+
+        .power-name-input {
+            font-size: 1.1em;
+            font-weight: 700;
+            color: white;
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.4);
+            border-radius: 6px;
+            padding: 8px 12px;
+            min-width: 350px;
+            flex: 1;
+        }
+
+        .power-name-input:focus {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.6);
+        }
+
+        .power-header {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            padding: 15px 20px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .power-content {
+            background: linear-gradient(145deg, #ebf3fd 0%, #f8fbff 100%);
+            padding: 20px;
+        }
+
+        .component-item {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            margin: 10px 0;
+            padding: 15px;
+        }
+
+        .framework-select {
+            width: 150px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .framework-select option {
+            background: white;
+            color: black;
+            padding: 5px;
+        }
+
+        .modifiers-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #3498db;
+        }
+
+        .modifier-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #dee2e6;
+        }
+
+        .value-select {
+            width: 80px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .value-select option {
+            background: white;
+            color: black;
+            padding: 5px;
+        }
+
+        .name-input {
+            flex: 1;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .help-text {
+            background: #e8f5e8;
+            border-left: 4px solid #27ae60;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .optional-characteristics {
+            background: #f8f5ff;
+            border: 2px solid #8e44ad;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .optional-char-item {
+            background: linear-gradient(145deg, #ffffff 0%, #f4f1f7 100%);
+            border: 2px solid #8e44ad;
+            border-radius: 12px;
+            margin: 15px 0;
+            padding: 20px;
+            border-left: 6px solid #8e44ad;
+            box-shadow: 0 4px 12px rgba(142, 68, 173, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .optional-char-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(142, 68, 173, 0.2);
+        }
+
+        .char-select {
+            width: 150px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: white;
+            color: black;
+        }
+
+        .simple-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .list-item {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+            border: 2px solid #dee2e6;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .list-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            border-color: #3498db;
+        }
+
+        .item-name-input {
+            font-size: 1em;
+            font-weight: 700;
+            color: #2c3e50;
+            background: rgba(52, 152, 219, 0.1);
+            border: 2px solid #3498db;
+            border-radius: 6px;
+            padding: 8px 12px;
+            min-width: 300px;
+            flex: 1;
+        }
+
+        .item-name-input:focus {
+            background: white;
+            border-color: #2980b9;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .summary-section {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+
+        .summary-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .summary-value {
+            font-weight: bold;
+            font-size: 1.8em;
+        }
+
+        .ratio-good {
+            background: rgba(39, 174, 96, 0.2) !important;
+            border: 2px solid #27ae60 !important;
+        }
+
+        .ratio-warning {
+            background: rgba(231, 76, 60, 0.2) !important;
+            border: 2px solid #e74c3c !important;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .validation-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .validation-success {
+            background: #d4edda;
+            border-left: 4px solid #27ae60;
+            color: #155724;
+        }
+
+        .validation-warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            color: #856404;
+        }
+
+        .validation-error {
+            background: #f8d7da;
+            border-left: 4px solid #e74c3c;
+            color: #721c24;
+        }
+
+        .component-label {
+            font-weight: bold;
+            font-size: 0.95em;
+            color: #2c3e50;
+        }
+
+        .multiform-pool-section {
+            background: #fff8e7;
+            border: 2px solid #f39c12;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .multiform-pool-section h4 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        /* Quick spacing tightener */
+        .data-table th {
+            padding: 8px 10px !important;
+            font-size: 0.85em !important;
+        }
+
+        .data-table td {
+            padding: 8px 6px !important;
+        }
+
+        .section-header {
+            padding: 12px 20px !important;
+            margin: 15px 0 12px 0 !important;
+            font-size: 1em !important;
+        }
+
+        .power-group {
+            margin: 12px 0 !important;
+        }
+
+        .power-header {
+            padding: 10px 15px !important;
+        }
+
+        .power-content {
+            padding: 15px !important;
+        }
+
+        .component-item {
+            margin: 8px 0 !important;
+            padding: 10px !important;
+        }
+
+        .modifier-item {
+            margin-bottom: 6px !important;
+            padding: 8px !important;
+        }
+
+        .optional-char-item {
+            margin: 10px 0 !important;
+            padding: 15px !important;
+        }
+
+        .list-item {
+            padding: 12px !important;
+            margin-bottom: 10px !important;
+        }
+
+        .modifiers-section {
+            padding: 10px !important;
+            margin: 8px 0 !important;
+        }
+
+        .tab-content {
+            padding: 20px !important;
+        }
+
+        .summary-section {
+            padding: 15px !important;
+            margin-top: 20px !important;
+        }
+
+        .summary-item {
+            padding: 10px !important;
+        }
+        .summary-item {
+            padding: 10px !important;
+        }
+
+        /* Extra tight containers for situations, powers, and skills */
+        .power-group {
+            border-width: 2px !important;
+            border-radius: 8px !important;
+            margin: 8px 0 !important;
+        }
+
+        .power-header {
+            padding: 8px 12px !important;
+            font-size: 0.95em !important;
+        }
+
+        .power-content {
+            padding: 10px !important;
+        }
+
+        .power-name-input {
+            font-size: 1em !important;
+            padding: 6px 10px !important;
+            min-width: 350px !important;
+        }
+
+        .component-item {
+            margin: 5px 0 !important;
+            padding: 8px !important;
+            border-radius: 5px !important;
+        }
+
+        .modifier-item {
+            margin-bottom: 4px !important;
+            padding: 6px !important;
+        }
+
+        .modifiers-section {
+            padding: 8px !important;
+            margin: 5px 0 !important;
+        }
+
+        .list-item {
+            padding: 8px !important;
+            margin-bottom: 6px !important;
+            border-radius: 6px !important;
+            gap: 10px !important;
+        }
+
+        .item-name-input {
+            padding: 6px 10px !important;
+            min-width: 200px !important;
+        }
+
+        .optional-char-item {
+            margin: 8px 0 !important;
+            padding: 12px !important;
+            border-radius: 8px !important;
+        }
+        .optional-char-item {
+            margin: 8px 0 !important;
+            padding: 12px !important;
+            border-radius: 8px !important;
+        }
+
+        /* Ultra-compact POWER BOXES specifically */
+        .power-group {
+            margin: 3px 0 !important;
+            border-width: 1px !important;
+            border-radius: 4px !important;
+        }
+
+        .power-header {
+            padding: 4px 8px !important;
+            font-size: 0.85em !important;
+        }
+
+        .power-content {
+            padding: 6px !important;
+        }
+
+        .power-name-input {
+            font-size: 0.9em !important;
+            padding: 4px 8px !important;
+            min-width: 350px !important;
+        }
+
+        .component-item {
+            margin: 2px 0 !important;
+            padding: 4px !important;
+            border-radius: 3px !important;
+        }
+
+        .modifiers-section {
+            padding: 4px !important;
+            margin: 3px 0 !important;
+        }
+
+        .modifier-item {
+            margin-bottom: 1px !important;
+            padding: 3px !important;
+            gap: 6px !important;
+        }
+
+        /* Make framework/value selects smaller */
+        .framework-select, .value-select {
+            padding: 2px !important;
+            font-size: 0.85em !important;
+        }
+
+        .name-input {
+            padding: 3px !important;
+            font-size: 0.85em !important;
+        }
+/* Ultra-compact SITUATIONS specifically */
+.list-item {
+    padding: 4px !important;
+    margin-bottom: 3px !important;
+    gap: 6px !important;
+}
+
+.item-name-input {
+    padding: 4px 6px !important;
+    min-width: 300px !important;
+    font-size: 0.85em !important;
+}
+
+/* Hide "Notes" and "Details" labels in situations */
+.list-item label {
+    display: none !important;
+}
+
+/* Make situation text areas more compact */
+.list-item textarea {
+    padding: 4px !important;
+    font-size: 0.85em !important;
+    min-height: 40px !important;
+}
+
+/* Tighten up any other form elements in situations */
+.list-item input, .list-item select {
+    padding: 3px 6px !important;
+    font-size: 0.85em !important;
+}
+/* Slightly tighter characteristics (optional) */
+.data-table th {
+    padding: 6px 8px !important;
+    font-size: 0.8em !important;
+}
+
+.data-table td {
+    padding: 6px 4px !important;
+    font-size: 0.85em !important;
+}
+
+.input-field {
+    padding: 4px !important;
+    font-size: 0.85em !important;
+}
+/* Tighten layout around component notes and modifiers */
+.component-item + textarea,
+.component-item + .notes-field,
+textarea.notes-field {
+    margin-top: 6px !important;
+    font-size: 0.85em !important;
+}
+
+/* Bring advantages/limitations closer */
+.modifiers-section {
+    margin-top: 4px !important;
+}
+
+/* Remove redundant label for Add-ons & Notes if identifiable */
+label.addons-label,
+.section-header.ec-slot-label,
+label[for="addons"],
+label[for="notes"] {
+    display: none !important;
+}
+
+/* Inline layout for EC header if used */
+.ec-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+/* Rename Elemental Control Reduction label via JavaScript if necessary */
+label[for="ecReduction"]::before {
+    content: "Elemental Control Reduction";
+}
+/* Hide the "Add-ons & Notes" label */
+label.section-label {
+    display: none !important;
+}
+
+/* Hide the "Elemental Control Slot" header (h4 element) */
+h4 {
+    display: none !important;
+}
+
+/* Replace "Elemental Control Reduction" label with "Elemental Control Reduction" */
+.component-label {
+    font-weight: bold;
+    font-size: 0.95em;
+    color: #2c3e50;
+}
+
+/* Only target the Elemental Control Reduction label specifically by its text */
+.component-label:contains("Elemental Control Reduction:")::before {
+    content: "Elemental Control Reduction:";
+}
+
+.component-label:contains("Elemental Control Reduction:") {
+    color: transparent;
+    position: relative;
+}
+
+.component-label:contains("Elemental Control Reduction:")::before {
+    color: #2c3e50;
+    position: absolute;
+    left: 0;
+}
+.input-field,
+.value-select,
+.name-input {
+  font-size: 0.8em !important;
+}
+
+.component-label {
+  font-size: 0.85em !important;
+}
+
+.data-table th,
+.data-table td {
+  font-size: 0.75em !important;
+}
+/* Smaller label styles for Advantages & Limitations */
+.modifier-label {
+  font-size: 0.75em !important;
+  font-weight: bold;
+  display: inline-block;
+  margin-bottom: 4px;
+  color: #2c3e50;
+}
+
+/* Optional: color differentiation */
+.advantages-label {
+  color: #2e7d32;
+}
+
+.limitations-label {
+  color: #d35400;
+}
+
+/* Modifier section total */
+.modifier-total {
+  font-size: 0.7em !important;
+  font-weight: bold;
+  margin-top: 4px !important;
+  color: #2c3e50;
+  text-align: right;
+}
+.modifier-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.modifier-label {
+    font-size: 0.85rem;
+    font-weight: bold; /* updated from 500 to bold */
+    color: #2c3e50;
+}
+.modifier-label {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.modifier-total {
+    font-size: 0.85rem;
+    font-weight: normal;
+    margin-top: 8px;
+    color: #2c3e50;
+}
+
+/* SAFE POWER IMPROVEMENTS ONLY */
+.power-header {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%) !important;
+    color: #2c3e50 !important;
+    border-bottom: 3px solid #3498db !important;
+}
+
+.power-name-input {
+    font-size: 1.2em !important;
+    color: #2c3e50 !important;
+    background: white !important;
+    border: 2px solid #3498db !important;
+}
+
+.power-group {
+    background: white !important;
+    border: 2px solid #3498db !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08) !important;
+}
+
+/* LEFT JUSTIFY NAMES FOR BETTER READABILITY */
+.item-name-input {
+    text-align: left !important;
+}
+
+.power-name-input {
+    text-align: left !important;
+}
+
+.input-field.item-name-input {
+    text-align: left !important;
+}
+
+/* BETTER POWER SEPARATION */
+.power-group {
+    margin: 20px 0 !important;
+    border: 3px solid #3498db !important;
+    border-radius: 12px !important;
+}
+
+.power-group + .power-group {
+    margin-top: 30px !important;
+}
+
+.power-header {
+    padding: 16px 20px !important;
+    font-size: 1.1em !important;
+    font-weight: 700 !important;
+    border-bottom: 4px solid #3498db !important;
+}
+
+/* HIGH CONTRAST POWER CARDS - CONSISTENT WITH CHARACTERISTICS */
+.power-group {
+    border: 3px solid #2c3e50 !important; /* Dark grey borders to match */
+    background: #f5f5f5 !important; /* Medium grey background */
+}
+
+.power-header {
+    background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%) !important; /* Match characteristics headers */
+    color: white !important;
+    border-bottom: none !important;
+}
+
+.power-name-input {
+    color: #ffffff !important; /* White text for power name */
+    background: rgba(255,255,255,0.2) !important; /* Semi-transparent white */
+    border: 2px solid rgba(255,255,255,0.4) !important;
+}
+
+.power-content {
+    background: #f5f5f5 !important; /* Medium grey content area */
+    color: #000000 !important; /* Black text for readability */
+}
+
+/* Make cost display white text */
+.power-header div {
+    color: #ffffff !important;
+}
+
+/* FIX FIGURED CHARACTERISTICS ALIGNMENT ONLY */
+.data-table:nth-of-type(2) {
+    /* Target only the second table (Figured Characteristics) */
+}
+
+.data-table:nth-of-type(2) th:nth-child(1) {
+    width: 12.5%; /* Final Value - match Primary */
+}
+
+.data-table:nth-of-type(2) th:nth-child(2) {
+    width: 25%; /* Characteristic - match Primary's Characteristic column */
+}
+
+.data-table:nth-of-type(2) th:nth-child(3) {
+    width: 12.5%; /* Base - match Primary */
+}
+
+.data-table:nth-of-type(2) th:nth-child(4) {
+    width: 50%; /* The colspan area */
+}
+
+/* FORCE IDENTICAL TABLE LAYOUTS */
+.data-table {
+    table-layout: fixed !important;
+    width: 100% !important;
+}
+
+.data-table th:nth-child(1), .data-table td:nth-child(1) { width: 11% !important; } /* Final Value */
+.data-table th:nth-child(2), .data-table td:nth-child(2) { width: 7% !important; }  /* Dice */
+.data-table th:nth-child(3), .data-table td:nth-child(3) { width: 20% !important; } /* Characteristic */
+.data-table th:nth-child(4), .data-table td:nth-child(4) { width: 10% !important; } /* Base */
+.data-table th:nth-child(5), .data-table td:nth-child(5) { width: 13% !important; } /* From Powers */
+.data-table th:nth-child(6), .data-table td:nth-child(6) { width: 13% !important; } /* From Points */
+.data-table th:nth-child(7), .data-table td:nth-child(7) { width: 13% !important; } /* Active Points */
+.data-table th:nth-child(8), .data-table td:nth-child(8) { width: 13% !important; } /* Total Cost */
+
+/* HIDE SPECIFIC HEADERS IN FIGURED CHARACTERISTICS TABLE ONLY */
+.data-table:nth-of-type(2) th:nth-child(2), /* Dice */
+.data-table:nth-of-type(2) th:nth-child(6), /* From Points */
+.data-table:nth-of-type(2) th:nth-child(7), /* Active Points */
+.data-table:nth-of-type(2) th:nth-child(8)  /* Total Cost */
+{
+    color: transparent !important;
+}
+
+/* CENTER CHARACTERISTIC NAMES IN BOTH TABLES */
+.data-table th:nth-child(3), 
+.data-table td:nth-child(3) {
+    text-align: center !important;
+}
+
+/* ADD TEXT TO FIGURED CHARACTERISTICS DATA CELLS */
+.data-table:nth-of-type(2) tbody td:nth-child(6)::after {
+    content: "Automatically calculated";
+    color: #7f8c8d !important;
+    font-style: italic !important;
+    font-weight: normal !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    background: transparent !important;
+    display: block;
+    text-align: right;
+    visibility: visible !important;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 5px;
+    left: 5px;
+}
+
+.data-table:nth-of-type(2) tbody td:nth-child(7)::after {
+    content: "- no point cost";
+    color: #7f8c8d !important;
+    font-style: italic !important;
+    font-weight: normal !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    background: transparent !important;
+    display: block;
+    text-align: left;
+    visibility: visible !important;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 5px;
+    right: 5px;
+}
+
+/* Make the parent cells relative positioned */
+.data-table:nth-of-type(2) tbody td:nth-child(6),
+.data-table:nth-of-type(2) tbody td:nth-child(7) {
+    position: relative !important;
+}
+
+/* Add separating lines between characteristic groups in Primary Characteristics */
+.data-table:first-of-type tbody tr:nth-child(2) td {
+    border-bottom: 1px solid #2c3e50 !important; /* After Presence (end of STR/PRE group) */
+}
+
+.data-table:first-of-type tbody tr:nth-child(3) td {
+    border-bottom: 1px solid #2c3e50 !important; /* After Body (alone) */
+}
+
+.data-table:first-of-type tbody tr:nth-child(6) td {
+    border-bottom: 1px solid #2c3e50 !important; /* After Defense (R) (end of Defense group) */
+}
+
+.data-table:first-of-type tbody tr:nth-child(7) td {
+    border-bottom: 1px solid #2c3e50 !important; /* After Speed (alone) */
+}
+You're absolutely correct - you need the line after Defense (R) to separate the Defense group from Speed!RetryClaude can make mistakes. Please double-check responses.
+.input-field::-webkit-outer-spin-button,
+.input-field::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+}
+/* LARGER TEXT FOR CHARACTERISTICS TABLES */
+.data-table th {
+    padding: 6px 8px !important;
+    font-size: 0.9em !important;  /* Up from 0.8em */
+}
+
+.data-table td {
+    padding: 8px 4px !important;  /* Slightly more vertical padding */
+    font-size: 1em !important;    /* Up from 0.85em */
+    font-weight: 500 !important;  /* Add medium weight for visibility */
+}
+
+.input-field {
+    padding: 6px !important;      /* Keep current padding */
+    font-size: 1em !important;    /* Up from 0.85em */
+    font-weight: bold !important; /* Keep bold */
+}
+
+.final-value {
+    font-weight: bold;
+    font-size: 1.1em !important;  /* Up from 0.95em */
+    color: #e74c3c;
+    background-color: #fff5f5;
+    border-radius: 4px;
+}
+
+.points-display {
+    font-weight: bold;
+    color: #8e44ad;
+    background-color: #f4f1f7;
+    padding: 6px 8px !important;  /* Slightly more padding */
+    border-radius: 4px;
+    font-size: 0.95em !important; /* Add explicit size */
+}
+
+.char-name {
+    font-weight: bold;
+    color: #2c3e50;
+    text-align: left !important;
+    padding-left: 15px !important;
+    font-size: 1em !important;    /* Add explicit size */
+}
+
+.increase-input {
+    width: 70px !important;       /* Slightly wider for larger text */
+}
+/* New 5-column layout */
+.data-table th:nth-child(1), .data-table td:nth-child(1) { width: 20% !important; } /* Value */
+.data-table th:nth-child(2), .data-table td:nth-child(2) { width: 30% !important; } /* Characteristic */
+.data-table th:nth-child(3), .data-table td:nth-child(3) { width: 15% !important; } /* Base */
+.data-table th:nth-child(4), .data-table td:nth-child(4) { width: 20% !important; } /* From Powers */
+.data-table th:nth-child(5), .data-table td:nth-child(5) { width: 15% !important; } /* Points */
+
+/* Clean figured characteristics styling - make columns 2-5 white */
+.data-table:nth-of-type(2) tbody td:nth-child(2),
+.data-table:nth-of-type(2) tbody td:nth-child(3),
+.data-table:nth-of-type(2) tbody td:nth-child(4),
+.data-table:nth-of-type(2) tbody td:nth-child(5) {
+    background-color: white !important;
+    color: #2c3e50 !important;
+    font-style: italic !important;
+}
+
+.data-table:nth-of-type(2) tr:hover td:nth-child(2),
+.data-table:nth-of-type(2) tr:hover td:nth-child(3),
+.data-table:nth-of-type(2) tr:hover td:nth-child(4),
+.data-table:nth-of-type(2) tr:hover td:nth-child(5) {
+    background-color: white !important;
+    color: #2c3e50 !important;
+}
+
+/* Keep Final Value column special */
+.data-table:nth-of-type(2) td:nth-child(1) {
+    background-color: #fff5f5 !important;
+    color: #e74c3c !important;
+    font-style: normal !important;
+}
+
+.data-table:nth-of-type(2) tr:hover td:nth-child(1) {
+    background-color: #fff5f5 !important;
+    color: #e74c3c !important;
+}
+
+.dice-suffix {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #7f8c8d;
+    font-size: 0.85em;
+    pointer-events: none;
+    font-weight: normal;
+    z-index: 1;
+}
+
+.dice-input {
+    padding-right: 25px !important;
+    text-align: left !important;
+}
+.custom-spinner {
+    position: relative;
+}
+
+.custom-spinner::after {
+    content: "▲\A▼";
+    position: absolute;
+    right: 8px;
+    top: 2px;
+    bottom: 2px;
+    width: 16px;
+    background: #f8f9fa;
+    border: 1px solid #ccc;
+    border-left: 2px solid #ccc;
+    font-size: 10px;
+    line-height: 1.2;
+    white-space: pre-line;
+    color: #333;
+    cursor: pointer;
+    user-select: none;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 0 3px 3px 0;
+}
+
+.custom-spinner:hover::after {
+    background: #e9ecef;
+    color: #000;
+}
+/* Left justify the Characteristic column headers */
+.data-table th:nth-child(2) {
+    text-align: left !important;
+}
+/* Hide the Points header in the Figured Characteristics table only */
+.data-table:nth-of-type(2) th:nth-child(5) {
+    color: transparent !important;
+}
+
+/* Fix both Primary and Figured Characteristics tables */
+.data-table:nth-of-type(1) th:nth-child(2),
+.data-table:nth-of-type(2) th:nth-child(2) {
+    color: white !important;
+    text-align: left !important;
+    visibility: visible !important;
+    display: table-cell !important;
+}
+
+/* Hide only the Points header in Figured Characteristics table */
+.data-table:nth-of-type(2) th:nth-child(5) {
+    color: transparent !important;
+}
+
+/* Make sure all other headers in Figured table are visible */
+.data-table:nth-of-type(2) th:nth-child(1),
+.data-table:nth-of-type(2) th:nth-child(3),
+.data-table:nth-of-type(2) th:nth-child(4) {
+    color: white !important;
+    visibility: visible !important;
+    display: table-cell !important;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Heroes Unbound Build Sheet</h1>
+            <div style="display: flex; justify-content: center; align-items: center; gap: 30px; margin: 20px 0;">
+                <input type="text" id="characterName" placeholder="Enter Character Name" 
+                       style="font-size: 1em; padding: 10px; border: 2px solid rgba(255,255,255,0.3); border-radius: 8px; background: rgba(255,255,255,0.2); color: white; text-align: center; width: 300px; font-weight: bold;"
+                       onchange="updateCharacterName(this.value)">
+                
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <span style="font-weight: bold;">Character Type:</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" class="toggle-input" id="characterTypeToggle" onchange="updateCharacterType()">
+                        <span class="toggle-slider">
+                            <span>HERO</span>
+                            <span>VILLAIN</span>
+                        </span>
+                    </label>
+                    <div id="ratioLimit" style="font-size: 0.9em;">Ratio Limit: 119%</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-container">
+            <div class="tab-buttons">
+                <button class="tab-button active" onclick="showTab('situations', this)">⚡ Situations</button>
+                <button class="tab-button" onclick="showTab('characteristics', this)">📊 Characteristics</button>
+                <button class="tab-button" onclick="showTab('powers', this)">🔥 Powers</button>
+                <button class="tab-button" onclick="showTab('skills', this)">🎯 Skills</button>
+                <button class="tab-button" onclick="showTab('summary', this)">📋 Final Points</button>
+            </div>
+        </div>
+
+        <!-- SITUATIONS TAB -->
+        <div class="tab-content active" id="situations">
+            <div class="help-text">
+                <strong>Situations:</strong> Complications that give you build points to spend.
+            </div>
+            <div class="section-header">Character Situations</div>
+            <div class="simple-list">
+                <div id="situationsList"></div>
+                <div class="list-item">
+                    <button class="btn btn-primary" onclick="addSituation()">+ Add Situation</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHARACTERISTICS TAB -->
+        <div class="tab-content" id="characteristics">
+            <div class="help-text">
+                <strong>Characteristics:</strong> Enter point allocation increases and watch costs calculate automatically. Use Modified Characteristics for modified versions of the same characteristic.
+            </div>
+            
+            <div class="section-header">Primary Characteristics</div>
+            <table class="data-table">
+<thead>
+    <tr>
+        <th>Value</th>
+        <th>Characteristic</th>
+        <th>Base</th>
+        <th>From Powers</th>
+        <th>Points</th>
+    </tr>
+</thead>
+                <tbody id="characteristicsBody">
+                </tbody>
+            </table>
+
+<div class="section-header">Figured Characteristics</div>
+<table class="data-table">
+<thead>
+    <tr>
+        <th>Value</th>
+        <th>Characteristic</th>
+        <th>Base</th>
+        <th>From Powers</th>
+        <th>Points</th>
+    </tr>
+</thead>
+    <tbody id="figuredBody">
+    </tbody>
+</table>
+
+            <div class="section-header">
+                Modified Characteristics 
+                <button class="btn btn-secondary" onclick="addOptionalCharacteristic()" style="margin-left: 15px; font-size: 0.9em;">+ Add Modified Characteristic</button>
+            </div>
+            <div class="optional-characteristics">
+                <div id="optionalCharacteristicsList"></div>
+                <div style="text-align: center; color: #7f8c8d; font-style: italic; margin: 20px 0;" id="noOptionalChars">
+                    No modified characteristics added yet. Use the button above to add characteristics with special advantages or limitations.
+                </div>
+            </div>
+        </div>
+
+        <!-- POWERS TAB -->
+        <div class="tab-content" id="powers">
+            <div class="help-text">
+                <strong>Powers:</strong> Create powers with multiple components. Each component can have individual advantages and limitations.
+            </div>
+            <div class="section-header">Character Powers</div>
+            <div id="powersList"></div>
+            <div style="text-align: center; margin: 20px;">
+                <button class="btn btn-primary" onclick="addPower()">+ Add New Power</button>
+            </div>
+        </div>
+
+        <!-- SKILLS TAB -->
+        <div class="tab-content" id="skills">
+            <div class="help-text">
+                <strong>Skills:</strong> Enter skills and their point costs.
+            </div>
+            <div class="section-header">Character Skills</div>
+            <div class="simple-list">
+                <div id="skillsList"></div>
+                <div class="list-item">
+                    <button class="btn btn-primary" onclick="addSkill()">+ Add Skill</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SUMMARY TAB -->
+        <div class="tab-content" id="summary">
+<div class="help-text">
+    <strong>Final Summary:</strong> Complete character point breakdown and validation.
+</div>
+
+<!-- Orange Banner -->
+<div class="section-header" style="text-align: left;">
+    Summary & Export Options
+</div>
+        
+
+          
+<div style="background: #f8f9fa; border: 2px solid #3498db; border-radius: 10px; padding: 12px 20px; margin-bottom: 20px;">
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <span style="font-weight: bold; color: #2c3e50; font-size: 0.95em;">Experience Points:</span>
+        <input type="number" id="experiencePoints" class="input-field increase-input" 
+               value="0" 
+               onchange="updateExperiencePoints(this.value)" 
+               min="0" style="width: 80px;">
+        <span style="color: #7f8c8d; font-style: italic;">Additional points earned through play</span>
+    </div>
+</div>
+            
+
+<!-- 3-Column Summary Grid -->
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+    <!-- Column 1: Points -->
+    <div class="data-table" style="display: block; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.08);">
+        <div style="background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%); color: white; padding: 15px 20px; text-align: center; font-weight: 600; font-size: 1em;">
+            Points
+        </div>
+        <div style="padding: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #ecf0f1;">
+                <span style="color: #2c3e50; font-weight: 500;">Base Points</span>
+                <span style="font-weight: bold; color: #e74c3c; background-color: #fff5f5; padding: 4px 8px; border-radius: 4px; min-width: 40px; text-align: center;">100</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #ecf0f1;">
+                <span style="color: #2c3e50; font-weight: 500;">Situation Points</span>
+                <span id="equationSituationPoints" style="font-weight: bold; color: #e74c3c; background-color: #fff5f5; padding: 4px 8px; border-radius: 4px; min-width: 40px; text-align: center;">0</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #ecf0f1;">
+                <span style="color: #2c3e50; font-weight: 500;">Experience Points</span>
+                <span id="equationExperiencePoints" style="font-weight: bold; color: #e74c3c; background-color: #fff5f5; padding: 4px 8px; border-radius: 4px; min-width: 40px; text-align: center;">0</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-weight: bold; background-color: #f8f9fa; margin: 10px -20px -20px -20px; padding: 15px 20px;">
+                <span style="color: #2c3e50; font-weight: 500;">Build Points</span>
+                <span id="equationBuildPoints" style="background-color: #e8f5e8; color: #27ae60; border: 1px solid #27ae60; padding: 4px 8px; border-radius: 4px; min-width: 40px; text-align: center;">100</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Column 2: Point Allocation -->
+    <div class="data-table" style="display: block; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.08);">
+        <div style="background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%); color: white; padding: 15px 20px; text-align: center; font-weight: 600; font-size: 1em;">
+            Point Allocation
+        </div>
+        <div style="padding: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #ecf0f1;">
+                <span style="color: #2c3e50; font-weight: 500;">Characteristics</span>
+                <span id="equationCharacteristics" style="font-weight: bold; color: #e74c3c; background-color: #fff5f5; padding: 4px 8px; border-radius: 4px; min-width: 40px; text-align: center;">0</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #ecf0f1;">
+                <span style="color: #2c3e50; font-weight: 500;">Powers</span>
+                <span id="equationPowers" style="font-weight: bold; color: #e74c3c; background-color: #fff5f5; padding: 4px 8px; border-radius: 4px; min-width: 40px; text-align: center;">0</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #ecf0f1;">
+                <span style="color: #2c3e50; font-weight: 500;">Skills</span>
+                <span id="equationSkills" style="font-weight: bold; color: #e74c3c; background-color: #fff5f5; padding: 4px 8px; border-radius: 4px; min-width: 40px; text-align: center;">0</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-weight: bold; background-color: #f8f9fa; margin: 10px -20px -20px -20px; padding: 15px 20px;">
+                <span style="color: #2c3e50; font-weight: 500;">Total Points</span>
+                <span id="equationTotal" style="background-color: #e8f5e8; color: #27ae60; border: 1px solid #27ae60; padding: 4px 8px; border-radius: 4px; min-width: 40px; text-align: center;">0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Column 3: Build Status -->
+    <div class="data-table" style="display: block; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.08);">
+        <div style="background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%); color: white; padding: 15px 20px; text-align: center; font-weight: 600; font-size: 1em;">
+            Build Status
+        </div>
+        <div style="padding: 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #ecf0f1;">
+                <span style="color: #2c3e50; font-weight: 500;">Remaining Points</span>
+                <span id="equationRemaining" style="font-weight: bold; color: #e74c3c; background-color: #fff5f5; padding: 4px 8px; border-radius: 4px; min-width: 40px; text-align: center;">0</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #ecf0f1;">
+                <span style="color: #2c3e50; font-weight: 500;">Power Ratio</span>
+                <span id="equationRatio" style="font-weight: bold; color: #e74c3c; background-color: #fff5f5; padding: 4px 8px; border-radius: 4px; min-width: 40px; text-align: center;">0%</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #ecf0f1;">
+                <span style="color: #2c3e50; font-weight: 500;">Character Type</span>
+                <span style="font-weight: bold; color: #e74c3c; background-color: #fff5f5; padding: 4px 8px; border-radius: 4px; min-width: 40px; text-align: center;">Hero</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-weight: bold; background-color: #f8f9fa; margin: 10px -20px -20px -20px; padding: 15px 20px;">
+                <span style="color: #2c3e50; font-weight: 500;">Build Status</span>
+                <span style="background-color: #e8f5e8; color: #27ae60; border: 1px solid #27ae60; padding: 4px 8px; border-radius: 4px; min-width: 40px; text-align: center;">✅ Ready</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+                
+
+                
+
+
+            <!-- Hidden elements for backward compatibility -->
+            <div style="display: none;">
+                <div id="summarySituationPoints">0</div>
+                <div id="summaryAvailablePoints">100</div>
+                <div id="summaryCharacteristics">0</div>
+                <div id="summaryPowers">0</div>
+                <div id="summarySkills">0</div>
+                <div id="summaryTotal">0</div>
+                <div id="summaryRemaining">0</div>
+                <div id="ratioDisplay">
+                    <div id="summaryRatio">0%</div>
+                </div>
+            </div>
+
+<!-- Validation Messages Section -->
+<div class="data-table" style="display: block; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.08); margin-bottom: 20px;">
+    <div style="background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%); color: white; padding: 15px 20px; text-align: center; font-weight: 600; font-size: 1em;">
+        Build Validation
+    </div>
+    <div style="padding: 20px;">
+        <div id="validationMessages"></div>
+    </div>
+</div>
+
+<!-- Button Section -->
+<!-- Character Management Section -->
+<div style="background: #f8f9fa; border-radius: 10px; padding: 20px;">
+    <div style="font-weight: bold; color: #2c3e50; margin-bottom: 15px; font-size: 1.1em;">Character Management</div>
+    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+        <button onclick="exportBuildSheet()" style="padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: all 0.3s; font-size: 0.95em; min-width: 160px; text-align: center; background: #007bff; color: white;">
+            📄 Export as Text
+        </button>
+        <button onclick="saveCharacterData()" style="padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: all 0.3s; font-size: 0.95em; min-width: 160px; text-align: center; background: #28a745; color: white;">
+            💾 Export Character JSON
+        </button>
+        <button onclick="document.getElementById('loadCharacterFile').click()" style="padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: all 0.3s; font-size: 0.95em; min-width: 160px; text-align: center; background: #17a2b8; color: white;">
+            📁 Load Character JSON
+        </button>
+        <button onclick="exportHeroSheet()" style="padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; transition: all 0.3s; font-size: 0.95em; min-width: 160px; text-align: center; background: #6f42c1; color: white;">
+            🎭 Export Hero Sheet
+        </button>
+    </div>
+</div>
+
+<input type="file" id="loadCharacterFile" accept=".json" style="display: none;" onchange="loadCharacterData(event)">
+        </div>
+    </div>
+
+    <script>
+        // Custom rounding function
+        function heroSystemRound(value) {
+            const decimal = value - Math.floor(value);
+            return decimal <= 0.5 ? Math.floor(value) : Math.ceil(value);
+        }
+
+        // Global data
+        let isVillain = false;
+        const advantageValues = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5];
+        const limitationValues = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
+        
+const characteristicTypes = [
+    { name: 'Strength', multiplier: 5 },
+    { name: 'Presence', multiplier: 5 },
+    { name: 'Body', multiplier: 10 },
+    { name: 'Defense (O)', multiplier: 1 },
+    { name: 'Defense (R)', multiplier: 5 },
+    { name: 'Speed', multiplier: 10 },
+    { name: 'Dexterity', multiplier: 10 },
+    { name: 'Intelligence', multiplier: 10 },
+    { name: 'Ego', multiplier: 10 }
+];
+        
+        let characterData = {
+            characterName: '',
+            experiencePoints: 0,
+stunnedFromPowers: 0,
+characteristics: [
+    { name: 'Strength', base: 2, multiplier: 5, fromPowers: 0, pointAllocation: 0 },
+    { name: 'Presence', base: 2, multiplier: 5, fromPowers: 0, pointAllocation: 0 },
+    { name: 'Body', base: 10, multiplier: 10, fromPowers: 0, pointAllocation: 0 },
+    { name: 'Defense (O)', base: 10, multiplier: 1, fromPowers: 0, pointAllocation: 0 },
+    { name: 'Defense (OtR)', base: 0, multiplier: 4, fromPowers: 0, pointAllocation: 0 },
+    { name: 'Defense (R)', base: 0, multiplier: 5, fromPowers: 0, pointAllocation: 0 },
+    { name: 'Speed', base: 1, multiplier: 10, fromPowers: 0, pointAllocation: 0 },
+    { name: 'Dexterity', base: 11, multiplier: 10, fromPowers: 0, pointAllocation: 0 },
+    { name: 'Intelligence', base: 11, multiplier: 10, fromPowers: 0, pointAllocation: 0 },
+    { name: 'Ego', base: 11, multiplier: 10, fromPowers: 0, pointAllocation: 0 }
+],
+            charModifiers: {},
+            optionalCharacteristics: [],
+            situations: [],
+            powers: [],
+            skills: []
+        };
+
+        // Initialize character modifiers
+        characterData.characteristics.forEach(char => {
+            characterData.charModifiers[char.name] = {
+                advantages: [],
+                limitations: []
+            };
+        });
+
+        // Tab Management
+        function showTab(tabName, buttonElement) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById(tabName).classList.add('active');
+            if (buttonElement) {
+                buttonElement.classList.add('active');
+            }
+
+            // Use setTimeout to ensure the tab content is rendered before updating summary
+            if (tabName === 'summary') {
+                setTimeout(() => {
+                    updateSummary();
+                }, 10);
+            }
+        }
+
+        // Character Type Toggle
+        function updateCharacterType() {
+            isVillain = document.getElementById('characterTypeToggle').checked;
+            document.getElementById('ratioLimit').textContent = `Ratio Limit: ${isVillain ? '129%' : '119%'}`;
+            // Only update summary if we're on summary tab
+            const summaryTab = document.getElementById('summary');
+            if (summaryTab && summaryTab.classList.contains('active')) {
+                updateSummary();
+            }
+        }
+
+        // Character Name and Experience Points
+        function updateCharacterName(name) {
+            characterData.characterName = name;
+        }
+
+        function updateExperiencePoints(value) {
+            characterData.experiencePoints = parseInt(value) || 0;
+            // Use setTimeout to ensure the update happens after any rendering
+            setTimeout(() => {
+                updateSummary();
+            }, 10);
+        }
+
+        // Regular Characteristics Functions
+function updateCharacteristic(index, field, value) {
+    const newValue = parseInt(value) || 0;
+    const char = characterData.characteristics[index];
+    
+    // Special handling for Defense (OtR)
+    if (char.name === 'Defense (OtR)' && field === 'pointAllocation') {
+        const oldOtRValue = char.pointAllocation;
+        const defOIndex = characterData.characteristics.findIndex(c => c.name === 'Defense (O)');
+        const defOChar = characterData.characteristics[defOIndex];
+        
+        // Calculate how Defense (O) base should change
+        const otrChange = newValue - oldOtRValue;
+        const newDefOBase = 10 - newValue; // Defense (O) base = 10 - OtR
+        
+        // Validate: Defense (O) base can't go below 0
+        if (newDefOBase < 0) {
+            alert('Cannot convert more than 10 points of Defense (O) to Defense (OtR)');
+            return; // Don't allow the change
+        }
+        
+        // Update Defense (OtR)
+        characterData.characteristics[index][field] = newValue;
+        
+        // Update Defense (O) base
+        characterData.characteristics[defOIndex].base = newDefOBase;
+    } else {
+        // Normal characteristic update
+        characterData.characteristics[index][field] = newValue;
+    }
+    
+    renderCharacteristics();
+    renderFiguredCharacteristics();
+}
+
+function updateCharacteristicValue(index, newValue) {
+    const char = characterData.characteristics[index];
+    const targetValue = parseInt(newValue) || 0;
+    
+    // Validation: prevent negative values
+    if (targetValue < 0) {
+        renderCharacteristics();
+        return;
+    }
+    
+    // Special handling for Defense (OtR) - ADD THIS SECTION
+    if (char.name === 'Defense (OtR)') {
+        const defOIndex = characterData.characteristics.findIndex(c => c.name === 'Defense (O)');
+        const defOChar = characterData.characteristics[defOIndex];
+        
+        // Calculate the new Defense (O) base
+        const newDefOBase = 10 - targetValue;
+        
+        // Validate: Defense (O) base can't go below 0
+        if (newDefOBase < 0) {
+            alert('Cannot convert more than 10 points of Defense (O) to Defense (OtR)');
+            renderCharacteristics(); // Reset the display
+            return;
+        }
+        
+        // Update Defense (OtR) point allocation directly
+        char.pointAllocation = targetValue;
+        
+        // Update Defense (O) base
+        characterData.characteristics[defOIndex].base = newDefOBase;
+        
+        // Re-render and exit early
+        renderCharacteristics();
+        renderFiguredCharacteristics();
+        return;
+    }
+    
+    // Calculate what the point allocation should be to achieve this target value
+    const appliedModifiedBonus = characterData.optionalCharacteristics
+        .filter(optChar => optChar.characteristicType === char.name && optChar.applied)
+        .reduce((sum, optChar) => sum + optChar.pointAllocation, 0);
+    
+    const requiredPointAllocation = targetValue - char.base - char.fromPowers - appliedModifiedBonus;
+    
+    // Validation: don't allow negative point allocation
+    if (requiredPointAllocation < 0) {
+        renderCharacteristics();
+        return;
+    }
+    
+    // Update the point allocation
+    char.pointAllocation = requiredPointAllocation;
+    
+    // Re-render to update the display
+    renderCharacteristics();
+    renderFiguredCharacteristics();
+}
+
+function updateStunnedFromPowers(value) {
+    characterData.stunnedFromPowers = parseInt(value) || 0;
+    renderFiguredCharacteristics();
+}
+
+function calculateCharacteristicCost(char) {
+    // Calculate base final value
+    let finalValue = char.base + char.fromPowers + char.pointAllocation;
+    
+    // Add applied modified characteristics of the same type
+    const appliedModifiedBonus = characterData.optionalCharacteristics
+        .filter(optChar => optChar.characteristicType === char.name && optChar.applied)
+        .reduce((sum, optChar) => {
+            // Use the calculated final value of the modified characteristic
+            const modCalc = calculateOptionalCharacteristicCost(optChar);
+            return sum + optChar.pointAllocation; // Add the raw point allocation as bonus
+        }, 0);
+    
+    finalValue += appliedModifiedBonus;
+    
+    const activePoints = char.pointAllocation * char.multiplier;
+    const heightenedPoints = activePoints;
+    const totalCost = activePoints;
+
+    return {
+        finalValue,
+        activePoints,
+        heightenedPoints,
+        totalCost: heroSystemRound(totalCost)
+    };
+}
+
+function renderCharacteristics() {
+    const tbody = document.getElementById('characteristicsBody');
+    tbody.innerHTML = characterData.characteristics.map((char, index) => {
+        const calc = calculateCharacteristicCost(char);
+        
+       
+
+return `
+    <tr>
+        <td>
+<div style="display: flex; align-items: center; justify-content: center; gap: 2px;">
+    <input type="number" class="input-field" 
+           value="${calc.finalValue}" 
+           onchange="updateCharacteristicValue(${index}, this.value)" min="0"
+           style="width: 60px; text-align: center;">
+    ${(char.name === 'Strength' || char.name === 'Presence') ? 
+        '<span style="color: #7f8c8d; font-size: 0.8em; font-weight: normal;">d6</span>' : 
+        '<span style="width: 16px;"></span>'}
+</div>
+        </td>
+        <td class="char-name">${char.name}</td>
+        <td>${char.base}</td>
+        <td>
+            <input type="number" class="input-field increase-input" value="${char.fromPowers}" 
+                   onchange="updateCharacteristic(${index}, 'fromPowers', this.value)" min="0">
+        </td>
+        <td class="points-display">${calc.totalCost}</td>
+    </tr>
+`;
+    }).join('');
+}
+
+function renderFiguredCharacteristics() {
+    const tbody = document.getElementById('figuredBody');
+    const bodyChar = characterData.characteristics.find(c => c.name === 'Body');
+    const defOChar = characterData.characteristics.find(c => c.name === 'Defense (O)');
+    const defOtRChar = characterData.characteristics.find(c => c.name === 'Defense (OtR)');
+    const defRChar = characterData.characteristics.find(c => c.name === 'Defense (R)');
+
+    // Calculate Body including applied modified characteristics
+    const appliedModifiedBonus = characterData.optionalCharacteristics
+        .filter(optChar => optChar.characteristicType === 'Body' && optChar.applied)
+        .reduce((sum, optChar) => sum + optChar.pointAllocation, 0);
+
+
+    const bodyValue = bodyChar.base + bodyChar.pointAllocation + appliedModifiedBonus;
+    const defOValue = defOChar.base + defOChar.fromPowers + defOChar.pointAllocation;
+    const defOtRValue = defOtRChar.pointAllocation; // OtR only comes from points
+    const defRValue = defRChar.base + defRChar.fromPowers + defRChar.pointAllocation;    
+const figuredCharacteristics = [
+    { name: 'Stunned', value: bodyValue + characterData.stunnedFromPowers, formula: 'Body x1', hasFromPowers: true },
+    { name: 'Recovery', value: bodyValue, formula: 'Body x1', hasFromPowers: false },
+    { name: 'Knockout', value: bodyValue * 2, formula: 'Body x2', hasFromPowers: false },
+    { name: 'Endurance', value: bodyValue * 3, formula: 'Body x3', hasFromPowers: false },
+    { name: 'Defense (Total)', value: defOValue + defOtRValue + defRValue, formula: 'O + OtR + R', hasFromPowers: false }
+];
+
+tbody.innerHTML = figuredCharacteristics.map(figured => `
+    <tr>
+        <td class="final-value">${figured.value}</td>
+        <td class="char-name" style="color: #7f8c8d !important; font-style: italic;">${figured.name}</td>
+        <td style="font-style: italic; color: #7f8c8d; text-align: center;">${figured.formula}</td>
+        <td>
+            ${figured.hasFromPowers ? 
+                `<input type="number" class="input-field increase-input" value="${characterData.stunnedFromPowers}" 
+                       onchange="updateStunnedFromPowers(this.value)" min="0">` :
+                `<input type="number" class="input-field increase-input" value="0" 
+                       style="visibility: hidden;" readonly>`
+            }
+        </td>
+        <td class="points-display" style="visibility: hidden; background-color: #f8f9fa !important; color: #666 !important;">-</td>
+    </tr>
+`).join('');
+}
+
+        // Optional Characteristics Functions
+function addOptionalCharacteristic() {
+    const optionalChar = {
+        id: Date.now(),
+        characteristicType: 'Strength',
+        multiplier: 5,
+        pointAllocation: 0,
+        applied: false,  // Default to unchecked/disabled
+        advantages: [],
+        limitations: []
+    };
+    characterData.optionalCharacteristics.push(optionalChar);
+    renderOptionalCharacteristics();
+}
+
+function updateOptionalApplied(index, applied) {
+    characterData.optionalCharacteristics[index].applied = applied;
+    renderCharacteristics(); // Re-render to update Final Values
+    renderOptionalCharacteristics();
+   renderFiguredCharacteristics();
+}
+
+        function removeOptionalCharacteristic(index) {
+            characterData.optionalCharacteristics.splice(index, 1);
+            renderOptionalCharacteristics();
+        }
+
+function updateOptionalCharacteristic(index, field, value) {
+    if (field === 'pointAllocation') {
+        characterData.optionalCharacteristics[index][field] = parseInt(value) || 0;
+    } else if (field === 'characteristicType') {
+        const charType = characteristicTypes.find(c => c.name === value);
+        characterData.optionalCharacteristics[index].characteristicType = value;
+        characterData.optionalCharacteristics[index].multiplier = charType.multiplier;
+    }
+    renderOptionalCharacteristics();
+    renderCharacteristics(); // Add this line to update Primary characteristics!
+renderFiguredCharacteristics();
+}
+
+        function addOptionalModifier(optionalIndex, type) {
+            const modifier = { value: 0.25, name: '' };
+            characterData.optionalCharacteristics[optionalIndex][type].push(modifier);
+            renderOptionalCharacteristics();
+        }
+
+        function removeOptionalModifier(optionalIndex, type, modifierIndex) {
+            characterData.optionalCharacteristics[optionalIndex][type].splice(modifierIndex, 1);
+            renderOptionalCharacteristics();
+        }
+
+        function updateOptionalModifier(optionalIndex, type, modifierIndex, property, value) {
+            const modifier = characterData.optionalCharacteristics[optionalIndex][type][modifierIndex];
+            if (property === 'value') {
+                modifier[property] = parseFloat(value);
+            } else {
+                modifier[property] = value;
+            }
+            renderOptionalCharacteristics();
+        }
+
+        function calculateOptionalCharacteristicCost(optionalChar) {
+            const activePoints = optionalChar.pointAllocation * optionalChar.multiplier;
+            const advantagesTotal = optionalChar.advantages.reduce((sum, adv) => sum + adv.value, 0);
+            const heightenedPoints = activePoints * (1 + advantagesTotal);
+            const limitationsTotal = optionalChar.limitations.reduce((sum, lim) => sum + lim.value, 0);
+            const totalCost = heightenedPoints / (1 + limitationsTotal);
+
+            return {
+                activePoints,
+                heightenedPoints,
+                totalCost: heroSystemRound(totalCost)
+            };
+        }
+
+        function createOptionalModifierSection(type, optionalIndex, modifiers) {
+            const isAdvantage = type === 'advantages';
+            const values = isAdvantage ? advantageValues : limitationValues;
+            
+            return `
+                <div class="modifiers-section">
+                    <strong>${isAdvantage ? 'Advantages' : 'Limitations'}:</strong>
+                    <div>
+                        ${modifiers.map((mod, index) => `
+                            <div class="modifier-item">
+                                <select class="value-select" onchange="updateOptionalModifier(${optionalIndex}, '${type}', ${index}, 'value', this.value)">
+                                    ${values.map(val => `<option value="${val}" ${val === mod.value ? 'selected' : ''}>${val}</option>`).join('')}
+                                </select>
+                                <input type="text" class="name-input" placeholder="Enter name" 
+                                       value="${mod.name}" onchange="updateOptionalModifier(${optionalIndex}, '${type}', ${index}, 'name', this.value)">
+                                <button class="btn btn-remove" onclick="removeOptionalModifier(${optionalIndex}, '${type}', ${index})">Remove</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="btn btn-add" onclick="addOptionalModifier(${optionalIndex}, '${type}')">Add ${isAdvantage ? 'Advantage' : 'Limitation'}</button>
+                    <div style="margin-top: 10px; font-weight: bold;">
+                        Total: ${modifiers.reduce((sum, mod) => sum + mod.value, 0)}
+                    </div>
+                </div>
+            `;
+        }
+
+function renderOptionalCharacteristics() {
+    const container = document.getElementById('optionalCharacteristicsList');
+    const noCharsMessage = document.getElementById('noOptionalChars');
+    
+    if (characterData.optionalCharacteristics.length === 0) {
+        container.innerHTML = '';
+        noCharsMessage.style.display = 'block';
+        return;
+    }
+    
+    noCharsMessage.style.display = 'none';
+    container.innerHTML = characterData.optionalCharacteristics.map((optionalChar, index) => {
+        const calc = calculateOptionalCharacteristicCost(optionalChar);
+        
+        return `
+            <div class="optional-char-item">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <div style="display: flex; gap: 15px; align-items: center; flex: 1;">
+                        <div style="display: flex; flex-direction: column; gap: 5px; align-items: flex-start;">
+                            <span style="font-weight: bold;">Modified:</span>
+                            <label class="toggle-switch" style="width: 60px; height: 25px;">
+                                <input type="checkbox" class="toggle-input" ${optionalChar.applied ? 'checked' : ''} 
+                                       onchange="updateOptionalApplied(${index}, this.checked)">
+                                <span class="toggle-slider" style="font-size: 0.7em; padding: 0 8px;">
+                                    <span>OFF</span>
+                                    <span>ON</span>
+                                </span>
+                            </label>
+                        </div>
+                        <select class="char-select" onchange="updateOptionalCharacteristic(${index}, 'characteristicType', this.value)">
+                            ${characteristicTypes.map(charType => 
+                                `<option value="${charType.name}" ${charType.name === optionalChar.characteristicType ? 'selected' : ''}>${charType.name}</option>`
+                            ).join('')}
+                        </select>
+                        <span>From Points:</span>
+                        <input type="number" class="input-field increase-input" value="${optionalChar.pointAllocation}" 
+                               onchange="updateOptionalCharacteristic(${index}, 'pointAllocation', this.value)" min="0">
+                        <span>Multiplier: x${optionalChar.multiplier}</span>
+                    </div>
+                    <div style="text-align: right;">
+                        <div>Total Cost: <strong>${calc.totalCost}</strong></div>
+                        <div style="font-size: 0.9em; opacity: 0.7;">Active: ${calc.activePoints} | Heightened: ${heroSystemRound(calc.heightenedPoints)}</div>
+                    </div>
+                    <button class="btn btn-remove" onclick="removeOptionalCharacteristic(${index})" style="margin-left: 15px;">Remove</button>
+                </div>
+                
+                <div style="margin-top: 6px;">
+                    <textarea class="input-field" placeholder="Enter notes, description, or special conditions..." 
+                             onchange="updateOptionalCharacteristic(${index}, 'notes', this.value)"
+                             style="width: 100%; max-width: 100%; height: 60px; resize: vertical; text-align: left; margin-bottom: 8px;">${optionalChar.notes || ''}</textarea>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                    ${createOptionalModifierSection('advantages', index, optionalChar.advantages)}
+                    ${createOptionalModifierSection('limitations', index, optionalChar.limitations)}
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+        // Situations Functions
+        function addSituation() {
+            characterData.situations.push({ name: '', points: 0, notes: '' });
+            renderSituations();
+        }
+
+        function updateSituation(index, field, value) {
+            if (field === 'points') {
+                characterData.situations[index][field] = parseInt(value) || 0;
+            } else {
+                characterData.situations[index][field] = value;
+            }
+            if (field === 'points') {
+                renderSituations();
+            }
+        }
+
+        function removeSituation(index) {
+            characterData.situations.splice(index, 1);
+            renderSituations();
+        }
+
+        function renderSituations() {
+            const container = document.getElementById('situationsList');
+            container.innerHTML = characterData.situations.map((situation, index) => `
+                <div class="list-item" style="flex-direction: column; align-items: stretch;">
+                    <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 10px;">
+                        <input type="text" class="input-field item-name-input" placeholder="Situation name..." 
+                               value="${situation.name}" oninput="updateSituation(${index}, 'name', this.value)" style="flex: 1;">
+<input type="number" class="input-field increase-input" placeholder="Points" 
+       value="${situation.points}" onchange="updateSituation(${index}, 'points', this.value)" min="0" step="5">
+                        <button class="btn btn-primary" onclick="removeSituation(${index})">Remove</button>
+                    </div>
+                    <div>
+                        <label style="font-weight: bold; color: #2c3e50; display: block; margin-bottom: 5px;">Notes & Details:</label>
+                        <textarea class="input-field" placeholder="Enter situation details, frequency, or notes..." 
+                                 oninput="updateSituation(${index}, 'notes', this.value)"
+                                 style="width: 100%; max-width: 100%; height: 60px; resize: vertical; text-align: left;">${situation.notes || ''}</textarea>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Powers Functions
+        function addPower() {
+            const power = {
+                id: Date.now(),
+                name: '',
+                framework: 'None',
+                frameworkReduction: 0,
+                components: [],
+                powerLimitations: []
+            };
+            characterData.powers.push(power);
+            renderPowers();
+        }
+
+        function removePower(index) {
+            characterData.powers.splice(index, 1);
+            renderPowers();
+        }
+
+        function updatePower(index, field, value) {
+            if (field === 'frameworkReduction' || field === 'controlValue' || field === 'poolValue' || field === 'vppPoolValue') {
+                characterData.powers[index][field] = parseInt(value) || 0;
+            } else {
+                characterData.powers[index][field] = value;
+            }
+            
+            if (field === 'framework') {
+                if (value === 'Elemental Control Slot' || value === 'Multiform Slot') {
+                    characterData.powers[index].components.forEach(component => {
+                        component.limitations = [];
+                    });
+                }
+                
+                if (value === 'Multiform Pool') {
+                    if (!characterData.powers[index].poolAdvantages) {
+                        characterData.powers[index].poolAdvantages = [];
+                    }
+                    if (!characterData.powers[index].poolLimitations) {
+                        characterData.powers[index].poolLimitations = [];
+                    }
+                    if (!characterData.powers[index].poolValue) {
+                        characterData.powers[index].poolValue = 0;
+                    }
+                }
+                
+                if (value === 'Variable Power Pool') {
+                    if (!characterData.powers[index].controlAdvantages) {
+                        characterData.powers[index].controlAdvantages = [];
+                    }
+                    if (!characterData.powers[index].controlLimitations) {
+                        characterData.powers[index].controlLimitations = [];
+                    }
+                    if (!characterData.powers[index].controlValue) {
+                        characterData.powers[index].controlValue = 0;
+                    }
+                    if (!characterData.powers[index].vppPoolValue) {
+                        characterData.powers[index].vppPoolValue = 0;
+                    }
+                }
+            }
+            
+            renderPowers();
+        }
+
+        function addComponent(powerIndex) {
+            const component = {
+                id: Date.now(),
+                name: '',
+                activePoints: 0,
+                addOns: '',
+                advantages: [],
+                limitations: []
+            };
+            characterData.powers[powerIndex].components.push(component);
+            renderPowers();
+        }
+
+        function removeComponent(powerIndex, componentIndex) {
+            characterData.powers[powerIndex].components.splice(componentIndex, 1);
+            renderPowers();
+        }
+
+        function updateComponent(powerIndex, componentIndex, field, value) {
+            if (field === 'activePoints') {
+                characterData.powers[powerIndex].components[componentIndex][field] = parseInt(value) || 0;
+            } else {
+                characterData.powers[powerIndex].components[componentIndex][field] = value;
+            }
+            renderPowers();
+        }
+
+        function addControlModifier(powerIndex, type) {
+            const modifier = { value: 0.25, name: '' };
+            characterData.powers[powerIndex][`control${type.charAt(0).toUpperCase() + type.slice(1)}`].push(modifier);
+            renderPowers();
+        }
+
+        function removeControlModifier(powerIndex, type, modifierIndex) {
+            characterData.powers[powerIndex][`control${type.charAt(0).toUpperCase() + type.slice(1)}`].splice(modifierIndex, 1);
+            renderPowers();
+        }
+
+        function updateControlModifier(powerIndex, type, modifierIndex, property, value) {
+            const modifier = characterData.powers[powerIndex][`control${type.charAt(0).toUpperCase() + type.slice(1)}`][modifierIndex];
+            if (property === 'value') {
+                modifier[property] = parseFloat(value);
+            } else {
+                modifier[property] = value;
+            }
+            renderPowers();
+        }
+
+        function addPoolModifier(powerIndex, type) {
+            const modifier = { value: 0.25, name: '' };
+            characterData.powers[powerIndex][`pool${type.charAt(0).toUpperCase() + type.slice(1)}`].push(modifier);
+            renderPowers();
+        }
+
+        function removePoolModifier(powerIndex, type, modifierIndex) {
+            characterData.powers[powerIndex][`pool${type.charAt(0).toUpperCase() + type.slice(1)}`].splice(modifierIndex, 1);
+            renderPowers();
+        }
+
+        function updatePoolModifier(powerIndex, type, modifierIndex, property, value) {
+            const modifier = characterData.powers[powerIndex][`pool${type.charAt(0).toUpperCase() + type.slice(1)}`][modifierIndex];
+            if (property === 'value') {
+                modifier[property] = parseFloat(value);
+            } else {
+                modifier[property] = value;
+            }
+            renderPowers();
+        }
+
+        function addPowerModifier(powerIndex, componentIndex, type) {
+            const modifier = { value: 0.25, name: '' };
+            if (componentIndex === -1) {
+                characterData.powers[powerIndex].powerLimitations.push(modifier);
+            } else {
+                characterData.powers[powerIndex].components[componentIndex][type].push(modifier);
+            }
+            renderPowers();
+        }
+
+        function removePowerModifier(powerIndex, componentIndex, type, modifierIndex) {
+            if (componentIndex === -1) {
+                characterData.powers[powerIndex].powerLimitations.splice(modifierIndex, 1);
+            } else {
+                characterData.powers[powerIndex].components[componentIndex][type].splice(modifierIndex, 1);
+            }
+            renderPowers();
+        }
+
+        function updatePowerModifier(powerIndex, componentIndex, type, modifierIndex, property, value) {
+            let modifier;
+            if (componentIndex === -1) {
+                modifier = characterData.powers[powerIndex].powerLimitations[modifierIndex];
+            } else {
+                modifier = characterData.powers[powerIndex].components[componentIndex][type][modifierIndex];
+            }
+
+            if (property === 'value') {
+                modifier[property] = parseFloat(value);
+            } else {
+                modifier[property] = value;
+            }
+            renderPowers();
+        }
+
+        function calculatePowerCost(power) {
+            let totalHeightenedPoints = 0;
+            let totalActivePoints = 0;
+            let totalComponentCosts = 0;
+            let controlCost = 0;
+            let poolCost = 0;
+
+            if (!power.controlAdvantages) power.controlAdvantages = [];
+            if (!power.controlLimitations) power.controlLimitations = [];
+            if (!power.controlValue) power.controlValue = 0;
+            if (!power.poolAdvantages) power.poolAdvantages = [];
+            if (!power.poolLimitations) power.poolLimitations = [];
+            if (!power.poolValue) power.poolValue = 0;
+            if (!power.vppPoolValue) power.vppPoolValue = 0;
+
+            // Calculate framework costs
+            if (power.framework === 'Elemental Control') {
+                const controlAdvantagesTotal = power.controlAdvantages.reduce((sum, adv) => sum + adv.value, 0);
+                const controlHeightened = power.controlValue * (1 + controlAdvantagesTotal);
+                const controlLimitationsTotal = power.controlLimitations.reduce((sum, lim) => sum + lim.value, 0);
+                controlCost = controlHeightened / (1 + controlLimitationsTotal);
+                
+                // For ratio calculation, include framework heightened points
+                totalHeightenedPoints += controlHeightened;
+            }
+
+            if (power.framework === 'Multiform Pool') {
+                const poolAdvantagesTotal = power.poolAdvantages.reduce((sum, adv) => sum + adv.value, 0);
+                const poolHeightened = power.poolValue * (1 + poolAdvantagesTotal);
+                const poolLimitationsTotal = power.poolLimitations.reduce((sum, lim) => sum + lim.value, 0);
+                poolCost = poolHeightened / (1 + poolLimitationsTotal);
+                
+                // For ratio calculation, include framework heightened points
+                totalHeightenedPoints += poolHeightened;
+            }
+
+            if (power.framework === 'Variable Power Pool') {
+                const controlAdvantagesTotal = power.controlAdvantages.reduce((sum, adv) => sum + adv.value, 0);
+                const controlHeightened = power.controlValue * (1 + controlAdvantagesTotal);
+                const controlLimitationsTotal = power.controlLimitations.reduce((sum, lim) => sum + lim.value, 0);
+                controlCost = controlHeightened / (1 + controlLimitationsTotal);
+                poolCost = power.vppPoolValue || 0;
+                
+                // For ratio calculation, include framework heightened points
+                totalHeightenedPoints += controlHeightened + (power.vppPoolValue || 0);
+            }
+
+            // Calculate component costs
+            power.components.forEach(component => {
+                const advantagesTotal = component.advantages.reduce((sum, adv) => sum + adv.value, 0);
+                const limitationsTotal = component.limitations.reduce((sum, lim) => sum + lim.value, 0);
+                const componentHeightened = component.activePoints * (1 + advantagesTotal);
+                const componentFinalCost = componentHeightened / (1 + limitationsTotal);
+                
+                totalActivePoints += component.activePoints;
+                totalHeightenedPoints += componentHeightened;
+                totalComponentCosts += componentFinalCost;
+            });
+
+            let preLimitationPoints = totalHeightenedPoints;
+            let finalCost;
+
+            if (power.framework === 'None') {
+                finalCost = totalComponentCosts;
+            } else if (power.framework === 'Elemental Control') {
+                // For base EC framework, final cost is just the control cost
+                finalCost = 0; // Will be added via controlCost
+            } else if (power.framework === 'Multiform Pool') {
+                // For base Multiform Pool, final cost is just the pool cost
+                finalCost = 0; // Will be added via poolCost
+            } else if (power.framework === 'Variable Power Pool') {
+                // For base VPP, final cost is control cost + pool cost
+                finalCost = 0; // Will be added via controlCost + poolCost
+            } else {
+                // For slots (EC Slot, Multiform Slot)
+                if (power.framework === 'Elemental Control Slot') {
+                    preLimitationPoints = Math.max(0, totalHeightenedPoints - power.frameworkReduction);
+                } else if (power.framework === 'Multiform Slot') {
+                    preLimitationPoints = totalHeightenedPoints / 5;
+                }
+
+                const powerLimitationsTotal = power.powerLimitations.reduce((sum, lim) => sum + lim.value, 0);
+                finalCost = preLimitationPoints / (1 + powerLimitationsTotal);
+            }
+
+            return {
+                totalActivePoints,
+                totalHeightenedPoints,
+                preLimitationPoints,
+                controlCost: heroSystemRound(controlCost || 0),
+                poolCost: heroSystemRound(poolCost || 0),
+                finalCost: heroSystemRound(finalCost + (controlCost || 0) + (poolCost || 0))
+            };
+        }
+
+function createControlModifierSection(type, powerIndex, modifiers) {
+    const isAdvantage = type === 'advantages';
+    const values = isAdvantage ? advantageValues : limitationValues;
+
+    return `
+        <div class="modifiers-section">
+            <div style="font-size: 0.8em; font-weight: bold; margin-bottom: 5px;">
+                ${isAdvantage ? 'Advantages' : 'Limitations'}:
+            </div>
+            <div>
+                ${modifiers.map((mod, index) => `
+                    <div class="modifier-item">
+                        <select class="value-select" onchange="updateControlModifier(${powerIndex}, '${type}', ${index}, 'value', this.value)">
+                            ${values.map(val => `<option value="${val}" ${val === mod.value ? 'selected' : ''}>${val}</option>`).join('')}
+                        </select>
+                        <input type="text" class="name-input" placeholder="Enter name" 
+                               value="${mod.name}" onchange="updateControlModifier(${powerIndex}, '${type}', ${index}, 'name', this.value)">
+                        <button class="btn btn-remove" onclick="removeControlModifier(${powerIndex}, '${type}', ${index})">Remove</button>
+                    </div>
+                `).join('')}
+            </div>
+            <button class="btn btn-add" onclick="addControlModifier(${powerIndex}, '${type}')">Add ${isAdvantage ? 'Advantage' : 'Limitation'}</button>
+            <div style="margin-top: 8px; font-size: 0.8em;">
+                Total: ${modifiers.reduce((sum, mod) => sum + mod.value, 0)}
+            </div>
+        </div>
+    `;
+}
+
+        function createPoolModifierSection(type, powerIndex, modifiers) {
+            const isAdvantage = type === 'advantages';
+            const values = isAdvantage ? advantageValues : limitationValues;
+            
+            return `
+                <div class="modifiers-section">
+                    <strong class="modifier-label">${isAdvantage ? 'Advantages' : 'Limitations'}:</strong>
+                    <div>
+                        ${modifiers.map((mod, index) => `
+                            <div class="modifier-item">
+                                <select class="value-select" onchange="updatePoolModifier(${powerIndex}, '${type}', ${index}, 'value', this.value)">
+                                    ${values.map(val => `<option value="${val}" ${val === mod.value ? 'selected' : ''}>${val}</option>`).join('')}
+                                </select>
+                                <input type="text" class="name-input" placeholder="Enter name" 
+                                       value="${mod.name}" onchange="updatePoolModifier(${powerIndex}, '${type}', ${index}, 'name', this.value)">
+                                <button class="btn btn-remove" onclick="removePoolModifier(${powerIndex}, '${type}', ${index})">Remove</button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="btn btn-add" onclick="addPoolModifier(${powerIndex}, '${type}')">Add ${isAdvantage ? 'Advantage' : 'Limitation'}</button>
+                    <div class="modifier-total">
+                        Total: ${modifiers.reduce((sum, mod) => sum + mod.value, 0)}
+                    </div>
+                </div>
+            `;
+        }
+
+function createControlModifierSection(type, powerIndex, modifiers) {
+    const isAdvantage = type === 'advantages';
+    const values = isAdvantage ? advantageValues : limitationValues;
+
+    return `
+        <div class="modifiers-section">
+            <strong class="modifier-label">${isAdvantage ? 'Advantages' : 'Limitations'}:</strong>
+            <div>
+                ${modifiers.map((mod, index) => `
+                    <div class="modifier-item">
+                        <select class="value-select" onchange="updateControlModifier(${powerIndex}, '${type}', ${index}, 'value', this.value)">
+                            ${values.map(val => `<option value="${val}" ${val === mod.value ? 'selected' : ''}>${val}</option>`).join('')}
+                        </select>
+                        <input type="text" class="name-input" placeholder="Enter name" 
+                               value="${mod.name}" onchange="updateControlModifier(${powerIndex}, '${type}', ${index}, 'name', this.value)">
+                        <button class="btn btn-remove" onclick="removeControlModifier(${powerIndex}, '${type}', ${index})">Remove</button>
+                    </div>
+                `).join('')}
+            </div>
+            <button class="btn btn-add" onclick="addControlModifier(${powerIndex}, '${type}')">Add ${isAdvantage ? 'Advantage' : 'Limitation'}</button>
+            <div class="modifier-total" style="font-weight: normal;">
+                Total: ${modifiers.reduce((sum, mod) => sum + mod.value, 0)}
+            </div>
+        </div>
+    `;
+}
+
+function createPowerModifierSection(type, powerIndex, componentIndex, modifiers) {
+    const isAdvantage = type === 'advantages';
+    const values = isAdvantage ? advantageValues : limitationValues;
+
+    const power = characterData.powers[powerIndex];
+    const isComponentLimitation = !isAdvantage && componentIndex !== -1;
+    const isFrameworkPower = power.framework === 'Elemental Control Slot' || power.framework === 'Multiform Slot';
+
+    if (isComponentLimitation && isFrameworkPower) {
+        return `
+            <div class="modifiers-section" style="background: #fff3cd; border-left: 4px solid #ffc107;">
+                <strong class="modifier-label" style="color: #856404;">Limitations:</strong>
+                <div style="font-style: italic; color: #856404; padding: 10px; text-align: center;">
+                    Component limitations not allowed in ${power.framework}.<br>
+                    Use Power-Wide Limitations section below.
+                </div>
+            </div>
+        `;
+    }
+
+    return `
+        <div class="modifiers-section">
+            <strong class="modifier-label">${isAdvantage ? 'Advantages' : 'Limitations'}:</strong>
+            <div>
+                ${modifiers.map((mod, index) => `
+                    <div class="modifier-item">
+                        <select class="value-select" onchange="updatePowerModifier(${powerIndex}, ${componentIndex}, '${type}', ${index}, 'value', this.value)">
+                            ${values.map(val => `<option value="${val}" ${val === mod.value ? 'selected' : ''}>${val}</option>`).join('')}
+                        </select>
+                        <input type="text" class="name-input" placeholder="Enter name" 
+                               value="${mod.name}" onchange="updatePowerModifier(${powerIndex}, ${componentIndex}, '${type}', ${index}, 'name', this.value)">
+                        <button class="btn btn-remove" onclick="removePowerModifier(${powerIndex}, ${componentIndex}, '${type}', ${index})">Remove</button>
+                    </div>
+                `).join('')}
+            </div>
+            <button class="btn btn-add" onclick="addPowerModifier(${powerIndex}, ${componentIndex}, '${type}')">Add ${isAdvantage ? 'Advantage' : 'Limitation'}</button>
+            <div class="modifier-total">
+                Total: ${modifiers.reduce((sum, mod) => sum + mod.value, 0)}
+            </div>
+        </div>
+    `;
+}
+        function renderPowers() {
+            const container = document.getElementById('powersList');
+            container.innerHTML = characterData.powers.map((power, powerIndex) => {
+                const calc = calculatePowerCost(power);
+                
+                return `
+                    <div class="power-group">
+                        <div class="power-header">
+                            <div style="display: flex; gap: 15px; align-items: center; flex: 1;">
+                                <input type="text" class="input-field power-name-input" placeholder="Power name..." 
+                                       value="${power.name}" onchange="updatePower(${powerIndex}, 'name', this.value)">
+                                <select class="framework-select" onchange="updatePower(${powerIndex}, 'framework', this.value)"
+                                        style="background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.3); color: white;">
+                                    <option value="None" ${power.framework === 'None' ? 'selected' : ''}>No Framework</option>
+                                    <option value="Elemental Control" ${power.framework === 'Elemental Control' ? 'selected' : ''}>EC</option>
+                                    <option value="Elemental Control Slot" ${power.framework === 'Elemental Control Slot' ? 'selected' : ''}>EC Slot</option>
+                                    <option value="Multiform Pool" ${power.framework === 'Multiform Pool' ? 'selected' : ''}>Multiform Pool</option>
+                                    <option value="Multiform Slot" ${power.framework === 'Multiform Slot' ? 'selected' : ''}>Multiform Slot</option>
+                                    <option value="Variable Power Pool" ${power.framework === 'Variable Power Pool' ? 'selected' : ''}>VPP</option>
+                                </select>
+                            </div>
+                            <div style="text-align: right;">
+                                <div>Total Cost: <strong>${calc.finalCost}</strong></div>
+                                <div style="font-size: 0.9em; opacity: 0.8;">Active: ${calc.totalActivePoints + (power.framework === 'Elemental Control' ? (power.controlValue || 0) : power.framework === 'Multiform Pool' ? (power.poolValue || 0) : power.framework === 'Variable Power Pool' ? ((power.controlValue || 0) + (power.vppPoolValue || 0)) : 0)} | Heightened: ${heroSystemRound(calc.totalHeightenedPoints)}</div>
+                            </div>
+                            <button class="btn btn-remove" onclick="removePower(${powerIndex})" style="margin-left: 15px;">Remove Power</button>
+                        </div>
+                        <div class="power-content">
+${power.framework === 'Elemental Control' ? `
+                                <div style="background: #e8f5e8; border: 2px solid #27ae60; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                                    <h4 style="margin-bottom: 15px; color: #2c3e50;">Elemental Control (Base Framework)</h4>
+                                    <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px;">
+                                        <span class="component-label">Control Value:</span>
+                                        <input type="number" class="input-field increase-input" 
+                                               value="${power.controlValue || 0}" onchange="updatePower(${powerIndex}, 'controlValue', this.value)" min="0" step="5">
+                                    </div>
+                                    
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                        ${createControlModifierSection('advantages', powerIndex, power.controlAdvantages || [])}
+                                        ${createControlModifierSection('limitations', powerIndex, power.controlLimitations || [])}
+                                    </div>
+                                </div>
+                            ` : ''}
+
+                            ${power.framework === 'Elemental Control Slot' ? `
+                                <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px; padding: 10px 15px; margin-bottom: 16px;">
+                                    <div style="display: flex; gap: 12px; align-items: center;">
+                                        <span class="component-label" style="margin: 0;">Elemental Control Reduction:</span>
+                                        <input type="number" class="input-field increase-input" 
+                                               value="${power.frameworkReduction}" onchange="updatePower(${powerIndex}, 'frameworkReduction', this.value)" min="0" step="5">
+                                    </div>
+                                </div>
+                            ` : ''}
+
+                            ${power.framework === 'Multiform Pool' ? `
+                                <div class="multiform-pool-section">
+                                    <h4>Multiform Pool (Base Framework)</h4>
+                                    <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px;">
+                                        <span class="component-label">Pool Value:</span>
+                                        <input type="number" class="input-field increase-input" 
+                                               value="${power.poolValue || 0}" onchange="updatePower(${powerIndex}, 'poolValue', this.value)" min="0" step="5">
+                                    </div>
+                                    
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                        ${createPoolModifierSection('advantages', powerIndex, power.poolAdvantages || [])}
+                                        ${createPoolModifierSection('limitations', powerIndex, power.poolLimitations || [])}
+                                    </div>
+                                </div>
+                            ` : ''}
+                            
+                            ${power.framework === 'Variable Power Pool' ? `
+                                <div style="background: #f0f8ff; border: 2px solid #3498db; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                                    <h4 style="margin-bottom: 15px; color: #2c3e50;">Variable Power Pool Control</h4>
+                                    <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px;">
+                                        <span class="component-label">Control Value:</span>
+                                        <input type="number" class="input-field increase-input" 
+                                               value="${power.controlValue || 0}" onchange="updatePower(${powerIndex}, 'controlValue', this.value)" min="0" step="5">
+                                    </div>
+                                    
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                        ${createControlModifierSection('advantages', powerIndex, power.controlAdvantages || [])}
+                                        ${createControlModifierSection('limitations', powerIndex, power.controlLimitations || [])}
+                                    </div>
+                                </div>
+                                
+                                <div style="background: #fff0f5; border: 2px solid #e91e63; border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+                                    <h4 style="margin-bottom: 15px; color: #2c3e50;">Variable Power Pool</h4>
+                                    <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px;">
+                                        <span class="component-label">Pool Value:</span>
+                                        <input type="number" class="input-field increase-input" 
+                                               value="${power.vppPoolValue || 0}" onchange="updatePower(${powerIndex}, 'vppPoolValue', this.value)" min="0" step="5">
+                                    </div>
+                                    <div style="font-style: italic; color: #666; text-align: center; padding: 10px;">
+                                        Pool cannot have advantages or limitations
+                                    </div>
+                                </div>
+                            ` : ''}
+
+                            ${power.components.map((component, componentIndex) => {
+                                const compAdvantages = component.advantages.reduce((sum, adv) => sum + adv.value, 0);
+                                const compLimitations = component.limitations.reduce((sum, lim) => sum + lim.value, 0);
+                                const compHeightened = component.activePoints * (1 + compAdvantages);
+                                const compCost = compHeightened / (1 + compLimitations);
+                                
+                                return `
+                                    <div class="component-item">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                            <div style="display: flex; gap: 15px; align-items: center; flex: 1;">
+                                                <span class="component-label">Component:</span>
+                                                <input type="text" class="input-field" placeholder="Component name..." 
+                                                       value="${component.name}" onchange="updateComponent(${powerIndex}, ${componentIndex}, 'name', this.value)">
+                                                <span>Active Points:</span>
+                                                <input type="number" class="input-field increase-input" 
+                                                       value="${component.activePoints}" onchange="updateComponent(${powerIndex}, ${componentIndex}, 'activePoints', this.value)" min="0" step="5">
+                                            </div>
+                                            <div style="text-align: right;">
+                                                <div>Cost: <strong>${heroSystemRound(compCost)}</strong></div>
+                                                <div style="font-size: 0.9em; opacity: 0.7;">Heightened: ${heroSystemRound(compHeightened)}</div>
+                                            </div>
+                                            <button class="btn btn-remove" onclick="removeComponent(${powerIndex}, ${componentIndex})" style="margin-left: 10px;">Remove</button>
+                                        </div>
+                                        
+                                        <div style="margin-top: 6px;">
+                                            <textarea class="input-field" placeholder="Enter component add-ons, modifiers, or notes..." 
+                                                     onchange="updateComponent(${powerIndex}, ${componentIndex}, 'addOns', this.value)"
+                                                     style="width: 100%; max-width: 100%; height: 60px; resize: vertical; text-align: left; margin-bottom: 8px;">${component.addOns || ''}</textarea>
+                                        </div>
+
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                            ${createPowerModifierSection('advantages', powerIndex, componentIndex, component.advantages)}
+                                            ${createPowerModifierSection('limitations', powerIndex, componentIndex, component.limitations)}
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                            
+                            <div style="margin: 15px 0;">
+                                ${power.framework === 'None' || power.framework === 'Elemental Control Slot' || power.framework === 'Multiform Slot' ? `
+                                    <button class="btn btn-primary" onclick="addComponent(${powerIndex})">+ Add Component</button>
+                                ` : `
+                                    <div style="text-align: center; padding: 10px; color: #7f8c8d; font-style: italic;">
+                                        Components not applicable for ${power.framework} - this is a base framework
+                                    </div>
+                                `}
+                            </div>
+
+                            ${(power.framework !== 'None' && (power.powerLimitations.length > 0 || power.components.length > 0)) ? `
+                                <div style="border-top: 2px solid #dee2e6; padding-top: 15px; margin-top: 15px;">
+                                    <h4 style="margin-bottom: 15px; color: #2c3e50;">Power-Wide Limitations ${power.framework === 'Elemental Control Slot' || power.framework === 'Multiform Slot' ? '(Applied to Entire Power)' : ''}</h4>
+                                    ${createPowerModifierSection('powerLimitations', powerIndex, -1, power.powerLimitations)}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+// Skills Functions
+        function addSkill() {
+            characterData.skills.push({ name: '', points: 0 });
+            renderSkills();
+        }
+        function updateSkill(index, field, value) {
+            if (field === 'points') {
+                characterData.skills[index][field] = parseInt(value) || 0;
+            } else {
+                characterData.skills[index][field] = value;
+            }
+        }
+        function removeSkill(index) {
+            characterData.skills.splice(index, 1);
+            renderSkills();
+        }
+        function renderSkills() {
+            const container = document.getElementById('skillsList');
+            container.innerHTML = characterData.skills.map((skill, index) => `
+                <div class="list-item">
+                    <input type="text" class="input-field item-name-input" placeholder="Skill name..." 
+                           value="${skill.name}" onchange="updateSkill(${index}, 'name', this.value)">
+                    <input type="number" class="input-field increase-input" placeholder="Points" 
+                           value="${skill.points}" onchange="updateSkill(${index}, 'points', this.value)" min="0" step="5">
+                    <button class="btn btn-primary" onclick="removeSkill(${index})">Remove</button>
+                </div>
+            `).join('');
+        }
+
+
+        // Summary and Export Functions
+        function updateSummary() {
+            const charCost = characterData.characteristics.reduce((sum, char) => {
+                const calc = calculateCharacteristicCost(char);
+                return sum + calc.totalCost;
+            }, 0);
+            
+            const optionalCharCost = characterData.optionalCharacteristics.reduce((sum, optionalChar) => {
+                const calc = calculateOptionalCharacteristicCost(optionalChar);
+                return sum + calc.totalCost;
+            }, 0);
+            
+            const powerCost = characterData.powers.reduce((sum, power) => {
+                const calc = calculatePowerCost(power);
+                return sum + calc.finalCost;
+            }, 0);
+            
+            const skillCost = characterData.skills.reduce((sum, skill) => sum + skill.points, 0);
+            const situationPoints = characterData.situations.reduce((sum, situation) => sum + situation.points, 0);
+            const experiencePoints = characterData.experiencePoints;
+            const totalCharCost = charCost + optionalCharCost;
+            const total = totalCharCost + powerCost + skillCost;
+            const availablePoints = 100 + situationPoints + experiencePoints;
+            const remainingPoints = availablePoints - total;
+
+            // Calculate ratio - correct Hero System formula
+            const characterHeightenedPoints = characterData.characteristics.reduce((sum, char) => {
+                const calc = calculateCharacteristicCost(char);
+                return sum + calc.heightenedPoints;
+            }, 0) + characterData.optionalCharacteristics.reduce((sum, optChar) => {
+                const calc = calculateOptionalCharacteristicCost(optChar);
+                return sum + calc.heightenedPoints;
+            }, 0);
+            
+            const skillPoints = characterData.skills.reduce((sum, skill) => sum + skill.points, 0);
+            
+            // For powers, use Pre-Limitation Points for ratio calculation
+            const powerPreLimitationPoints = characterData.powers.reduce((sum, power) => {
+                const calc = calculatePowerCost(power);
+                // For No Framework powers, Pre-Lim = Heightened
+                // For EC/Multiform Slots, Pre-Lim is calculated in preLimitationPoints
+                // For other frameworks, Pre-Lim = Heightened
+                if (power.framework === 'Elemental Control Slot' || power.framework === 'Multiform Slot') {
+                    return sum + calc.preLimitationPoints;
+                } else {
+                    return sum + calc.totalHeightenedPoints;
+                }
+            }, 0);
+            
+            const ratioNumerator = characterHeightenedPoints + powerPreLimitationPoints + skillPoints;
+            const ratio = total > 0 ? (ratioNumerator / total) * 100 : 0;
+            const ratioLimit = isVillain ? 129 : 119;
+
+            // Update display
+            document.getElementById('equationSituationPoints').textContent = situationPoints;
+            document.getElementById('equationExperiencePoints').textContent = experiencePoints;
+            document.getElementById('equationBuildPoints').textContent = availablePoints;
+            document.getElementById('equationCharacteristics').textContent = heroSystemRound(totalCharCost);
+            document.getElementById('equationPowers').textContent = heroSystemRound(powerCost);
+            document.getElementById('equationSkills').textContent = skillCost;
+            document.getElementById('equationTotal').textContent = heroSystemRound(total);
+            document.getElementById('equationRemaining').textContent = heroSystemRound(remainingPoints);
+            document.getElementById('equationRatio').textContent = Math.round(ratio) + '%';
+            document.getElementById('summarySituationPoints').textContent = situationPoints;
+            document.getElementById('summaryAvailablePoints').textContent = availablePoints;
+            document.getElementById('summaryCharacteristics').textContent = heroSystemRound(totalCharCost);
+            document.getElementById('summaryPowers').textContent = heroSystemRound(powerCost);
+            document.getElementById('summarySkills').textContent = skillCost;
+            document.getElementById('summaryTotal').textContent = heroSystemRound(total);
+            document.getElementById('summaryRemaining').textContent = heroSystemRound(remainingPoints);
+            document.getElementById('summaryRatio').textContent = Math.round(ratio) + '%';
+
+            // Update ratio styling on the equation display
+            const equationRatioElement = document.getElementById('equationRatio');
+            equationRatioElement.style.background = ratio > ratioLimit ? 
+                'rgba(231, 76, 60, 0.3)' : 'rgba(46, 204, 113, 0.3)';
+            equationRatioElement.style.border = ratio > ratioLimit ? 
+                '2px solid rgba(231, 76, 60, 0.5)' : '2px solid rgba(46, 204, 113, 0.5)';
+
+            // Update ratio styling on the original summary grid
+            const ratioDisplay = document.getElementById('ratioDisplay');
+            ratioDisplay.className = 'summary-item';
+            if (ratio > ratioLimit) {
+                ratioDisplay.classList.add('ratio-warning');
+            } else {
+                ratioDisplay.classList.add('ratio-good');
+            }
+
+            updateValidationMessages(total, availablePoints, ratio, ratioLimit, situationPoints, experiencePoints);
+        }
+
+        function updateValidationMessages(totalSpent, availablePoints, ratio, ratioLimit, situationPoints, experiencePoints) {
+            const container = document.getElementById('validationMessages');
+            
+            // Only update validation messages if the container exists (i.e., we're on the summary tab)
+            if (!container) return;
+            
+            const messages = [];
+
+            if (ratio > ratioLimit) {
+                messages.push({
+                    type: 'error',
+                    text: `⚠️ Power ratio (${Math.round(ratio)}%) exceeds ${isVillain ? 'villain' : 'hero'} limit of ${ratioLimit}%!`
+                });
+            } else if (ratio > 0) {
+                messages.push({
+                    type: 'success',
+                    text: `✅ Power ratio (${Math.round(ratio)}%) is within ${isVillain ? 'villain' : 'hero'} limits.`
+                });
+            }
+
+// Only check 200-point limit for heroes, not villains
+if (!isVillain && totalSpent > 200) {
+    messages.push({
+        type: 'error',
+        text: `⚠️ Total spent (${Math.round(totalSpent)}) exceeds starting character limit of 200 points!`
+    });
+}
+
+            if (situationPoints < 100) {
+                messages.push({
+                    type: 'warning',
+                    text: `⚠️ You need at least 100 situation points (currently ${situationPoints}) to get full build points.`
+                });
+            }
+
+            if (totalSpent < availablePoints - 50 && availablePoints > 100) {
+                messages.push({
+                    type: 'warning',
+                    text: `💡 You have ${Math.round(availablePoints - totalSpent)} unspent build points remaining.`
+                });
+            }
+
+            if (messages.length === 0) {
+                messages.push({
+                    type: 'success',
+                    text: `✅ Character build looks good! Ready for play.`
+                });
+            }
+
+            container.innerHTML = messages.map(msg => `
+                <div class="validation-message validation-${msg.type}">
+                    ${msg.text}
+                </div>
+            `).join('');
+        }
+
+        // Export functions (with working implementations)
+function exportBuildSheet() {
+    const charName = characterData.characterName || 'Unnamed Character';
+    
+    let exportText = `HEROES UNBOUND CHARACTER BUILD SHEET\n`;
+    exportText += `${'='.repeat(50)}\n\n`;
+    exportText += `Character: ${charName}\n`;
+    exportText += `Type: ${isVillain ? 'Villain' : 'Hero'}\n\n`;
+
+    // Characteristics
+    exportText += `CHARACTERISTICS:\n`;
+    exportText += `${'-'.repeat(50)}\n`;
+    characterData.characteristics.forEach(char => {
+        const calc = calculateCharacteristicCost(char);
+        exportText += `${char.name.padEnd(15)} ${calc.finalValue.toString().padEnd(5)} (${calc.totalCost} points)\n`;
+    });
+
+    // Figured Characteristics
+exportText += `\nFIGURED CHARACTERISTICS:\n`;
+exportText += `${'-'.repeat(50)}\n`;
+// Calculate figured characteristics using the same logic as the UI
+const bodyChar = characterData.characteristics.find(c => c.name === 'Body');
+const defOChar = characterData.characteristics.find(c => c.name === 'Defense (O)');
+const defOtRChar = characterData.characteristics.find(c => c.name === 'Defense (OtR)');
+const defRChar = characterData.characteristics.find(c => c.name === 'Defense (R)');
+// Calculate Body including applied modified characteristics
+const appliedModifiedBonus = characterData.optionalCharacteristics
+    .filter(optChar => optChar.characteristicType === 'Body' && optChar.applied)
+    .reduce((sum, optChar) => sum + optChar.pointAllocation, 0);
+const bodyValue = bodyChar.base + bodyChar.pointAllocation + appliedModifiedBonus;
+const defOValue = defOChar.base + defOChar.fromPowers + defOChar.pointAllocation;
+const defOtRValue = defOtRChar ? defOtRChar.pointAllocation : 0;
+const defRValue = defRChar.base + defRChar.fromPowers + defRChar.pointAllocation;
+const stunnedValue = bodyValue + (characterData.stunnedFromPowers || 0);
+const recoveryValue = bodyValue;
+const knockoutValue = bodyValue * 2;
+const enduranceValue = bodyValue * 3;
+const defenseTotal = defOValue + defOtRValue + defRValue;
+exportText += `Stunned${''.padEnd(12)} ${stunnedValue.toString().padEnd(5)} (Body ${bodyValue}${(characterData.stunnedFromPowers || 0) > 0 ? ` + Powers ${characterData.stunnedFromPowers}` : ''})\n`;
+exportText += `Recovery${''.padEnd(11)} ${recoveryValue.toString().padEnd(5)} (Body x1)\n`;
+exportText += `Knockout${''.padEnd(11)} ${knockoutValue.toString().padEnd(5)} (Body x2)\n`;
+exportText += `Endurance${''.padEnd(10)} ${enduranceValue.toString().padEnd(5)} (Body x3)\n`;
+exportText += `Defense (Total)${''.padEnd(3)} ${defenseTotal.toString().padEnd(5)} (O + OtR + R)\n`;
+// Optional Characteristics
+if (characterData.optionalCharacteristics.length > 0) {
+    exportText += `\nMODIFIED CHARACTERISTICS:\n`;
+    exportText += `${'-'.repeat(50)}\n`;
+    characterData.optionalCharacteristics.forEach(optChar => {
+        const calc = calculateOptionalCharacteristicCost(optChar);
+        exportText += `Modified ${optChar.characteristicType} (${calc.totalCost} points)\n`;
+    });
+}
+
+    // Powers
+    if (characterData.powers.length > 0) {
+        exportText += `\nPOWERS:\n`;
+        exportText += `${'-'.repeat(50)}\n`;
+        characterData.powers.forEach(power => {
+            const calc = calculatePowerCost(power);
+            exportText += `${power.name || 'Unnamed Power'} (${calc.finalCost} points)\n`;
+            if (power.framework !== 'None') {
+                exportText += `  Framework: ${power.framework}\n`;
+            }
+        });
+    }
+
+    // Skills
+    if (characterData.skills.length > 0) {
+        exportText += `\nSKILLS:\n`;
+        exportText += `${'-'.repeat(50)}\n`;
+        characterData.skills.forEach(skill => {
+            exportText += `${skill.name || 'Unnamed Skill'} (${skill.points} points)\n`;
+        });
+    }
+
+    // Situations
+    if (characterData.situations.length > 0) {
+        exportText += `\nSITUATIONS:\n`;
+        exportText += `${'-'.repeat(50)}\n`;
+        characterData.situations.forEach(situation => {
+            exportText += `${situation.name || 'Unnamed Situation'} (${situation.points} points)\n`;
+            if (situation.notes) {
+                exportText += `  Notes: ${situation.notes}\n`;
+            }
+        });
+    }
+
+    // Summary
+    const charCost = characterData.characteristics.reduce((sum, char) => {
+        const calc = calculateCharacteristicCost(char);
+        return sum + calc.totalCost;
+    }, 0) + characterData.optionalCharacteristics.reduce((sum, optChar) => {
+        const calc = calculateOptionalCharacteristicCost(optChar);
+        return sum + calc.totalCost;
+    }, 0);
+    
+    const powerCost = characterData.powers.reduce((sum, power) => {
+        const calc = calculatePowerCost(power);
+        return sum + calc.finalCost;
+    }, 0);
+    
+    const skillCost = characterData.skills.reduce((sum, skill) => sum + skill.points, 0);
+    const situationPoints = characterData.situations.reduce((sum, situation) => sum + situation.points, 0);
+    const total = charCost + powerCost + skillCost;
+    const availablePoints = 100 + situationPoints + characterData.experiencePoints;
+
+    exportText += `\nPOINT SUMMARY:\n`;
+    exportText += `${'-'.repeat(50)}\n`;
+    exportText += `Base Points: 100\n`;
+    exportText += `Situation Points: ${situationPoints}\n`;
+    exportText += `Experience Points: ${characterData.experiencePoints}\n`;
+    exportText += `Total Available: ${availablePoints}\n\n`;
+    exportText += `Characteristics: ${heroSystemRound(charCost)}\n`;
+    exportText += `Powers: ${heroSystemRound(powerCost)}\n`;
+    exportText += `Skills: ${skillCost}\n`;
+    exportText += `Total Spent: ${heroSystemRound(total)}\n`;
+    exportText += `Remaining: ${heroSystemRound(availablePoints - total)}\n`;
+
+    // Create and download file
+    const blob = new Blob([exportText], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${charName.replace(/[^a-z0-9]/gi, '_')}_build_sheet.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+        function exportAsHTML() {
+            const charName = characterData.characterName || 'Unnamed Character';
+            
+            // Clone the current document structure
+            const htmlContent = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${charName} - Character Sheet</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; border-bottom: 3px solid #3498db; padding-bottom: 10px; }
+        h2 { color: #34495e; margin-top: 30px; }
+        .summary { background: #ecf0f1; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        th, td { padding: 8px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #34495e; color: white; }
+        .points { font-weight: bold; color: #e74c3c; }
+        .item { margin: 10px 0; padding: 10px; background: #f8f9fa; border-left: 4px solid #3498db; }
+
+/* Style figured characteristics to show they're different */
+#figuredBody tr {
+    background-color: #f8f9fa !important;
+}
+
+#figuredBody td:nth-child(5),
+#figuredBody td:nth-child(6), 
+#figuredBody td:nth-child(7),
+#figuredBody td:nth-child(8) {
+    font-style: italic;
+    color: #7f8c8d;
+    text-align: center;
+}
+
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>${charName}</h1>
+        <div class="summary">
+            <strong>Character Type:</strong> ${isVillain ? 'Villain' : 'Hero'}<br>
+            <strong>Generated:</strong> ${new Date().toLocaleDateString()}
+        </div>
+        
+        <h2>Characteristics</h2>
+        <table>
+            <tr><th>Characteristic</th><th>Value</th><th>Cost</th></tr>
+            ${characterData.characteristics.map(char => {
+                const calc = calculateCharacteristicCost(char);
+                return `<tr><td>${char.name}</td><td>${calc.finalValue}</td><td class="points">${calc.totalCost}</td></tr>`;
+            }).join('')}
+        </table>
+        
+        ${characterData.powers.length > 0 ? `
+        <h2>Powers</h2>
+        ${characterData.powers.map(power => {
+            const calc = calculatePowerCost(power);
+            return `<div class="item">
+                <strong>${power.name || 'Unnamed Power'}</strong> (${calc.finalCost} points)<br>
+                ${power.framework !== 'None' ? `Framework: ${power.framework}<br>` : ''}
+                ${power.components.map(comp => `• ${comp.name || 'Component'} (${comp.activePoints} AP)`).join('<br>')}
+            </div>`;
+        }).join('')}
+        ` : ''}
+        
+        ${characterData.skills.length > 0 ? `
+        <h2>Skills</h2>
+        ${characterData.skills.map(skill => 
+            `<div class="item"><strong>${skill.name || 'Unnamed Skill'}</strong> (${skill.points} points)</div>`
+        ).join('')}
+        ` : ''}
+        
+        ${characterData.situations.length > 0 ? `
+        <h2>Situations</h2>
+        ${characterData.situations.map(situation => 
+            `<div class="item">
+                <strong>${situation.name || 'Unnamed Situation'}</strong> (${situation.points} points)
+                ${situation.notes ? `<br><em>${situation.notes}</em>` : ''}
+            </div>`
+        ).join('')}
+        ` : ''}
+        
+        <h2>Point Summary</h2>
+        <div class="summary">
+            ${(() => {
+                const charCost = characterData.characteristics.reduce((sum, char) => {
+                    const calc = calculateCharacteristicCost(char);
+                    return sum + calc.totalCost;
+                }, 0) + characterData.optionalCharacteristics.reduce((sum, optChar) => {
+                    const calc = calculateOptionalCharacteristicCost(optChar);
+                    return sum + calc.totalCost;
+                }, 0);
+                
+                const powerCost = characterData.powers.reduce((sum, power) => {
+                    const calc = calculatePowerCost(power);
+                    return sum + calc.finalCost;
+                }, 0);
+                
+                const skillCost = characterData.skills.reduce((sum, skill) => sum + skill.points, 0);
+                const situationPoints = characterData.situations.reduce((sum, situation) => sum + situation.points, 0);
+                const total = charCost + powerCost + skillCost;
+                const availablePoints = 100 + situationPoints + characterData.experiencePoints;
+                
+                return `
+                    <strong>Available Points:</strong> ${availablePoints} (Base: 100 + Situations: ${situationPoints} + Experience: ${characterData.experiencePoints})<br>
+                    <strong>Characteristics:</strong> ${heroSystemRound(charCost)} points<br>
+                    <strong>Powers:</strong> ${heroSystemRound(powerCost)} points<br>
+                    <strong>Skills:</strong> ${skillCost} points<br>
+                    <strong>Total Spent:</strong> ${heroSystemRound(total)} points<br>
+                    <strong>Remaining:</strong> ${heroSystemRound(availablePoints - total)} points
+                `;
+            })()}
+        </div>
+    </div>
+</body>
+</html>`;
+
+            // Create and download file
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${charName.replace(/[^a-z0-9]/gi, '_')}_character_sheet.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Data persistence functions
+        function saveCharacterData() {
+    const fullData = {
+        characterData: characterData,
+        isVillain: isVillain,
+        savedAt: new Date().toLocaleString()
+    };
+    const jsonData = JSON.stringify(fullData, null, 2);
+            const blob = new Blob([jsonData], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${(characterData.characterName || 'character').replace(/[^a-z0-9]/gi, '_')}_data.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+function loadCharacterData(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const loadedData = JSON.parse(e.target.result);
+                
+                // Handle both old format (direct characterData) and new format (wrapped)
+                if (loadedData.characterData) {
+                    characterData = loadedData.characterData;
+                    isVillain = loadedData.isVillain || false;
+                } else {
+                    characterData = loadedData;
+                }
+                
+                // Handle missing stunnedFromPowers field
+                if (characterData.stunnedFromPowers === undefined) {
+                    characterData.stunnedFromPowers = 0;
+                }
+                
+                // Check if Defense (OtR) exists, if not, add it
+                const hasDefOtR = characterData.characteristics.some(char => char.name === 'Defense (OtR)');
+                if (!hasDefOtR) {
+                    console.log('Adding missing Defense (OtR)');
+                    // Insert Defense (OtR) after Defense (O) (position 4)
+                    characterData.characteristics.splice(4, 0, {
+                        name: 'Defense (OtR)',
+                        base: 0,
+                        multiplier: 4,
+                        fromPowers: 0,
+                        pointAllocation: 0
+                    });
+                }
+                
+                // Fix missing fields in characteristics array
+                if (characterData.characteristics && Array.isArray(characterData.characteristics)) {
+                    characterData.characteristics.forEach((char, index) => {
+                        if (char.pointAllocation === undefined) char.pointAllocation = 0;
+                        if (char.fromPowers === undefined) char.fromPowers = 0;
+                        if (char.base === undefined) {
+                            switch(char.name) {
+                                case 'Strength': char.base = 2; break;
+                                case 'Presence': char.base = 2; break;
+                                case 'Body': char.base = 10; break;
+                                case 'Defense (O)': char.base = 10; break;
+                                case 'Defense (OtR)': char.base = 0; break;
+                                case 'Defense (R)': char.base = 0; break;
+                                case 'Speed': char.base = 1; break;
+                                case 'Dexterity': char.base = 11; break;
+                                case 'Intelligence': char.base = 11; break;
+                                case 'Ego': char.base = 11; break;
+                                default: char.base = 0;
+                            }
+                        }
+                        if (char.multiplier === undefined) {
+                            switch(char.name) {
+                                case 'Strength': char.multiplier = 5; break;
+                                case 'Presence': char.multiplier = 5; break;
+                                case 'Body': char.multiplier = 10; break;
+                                case 'Defense (O)': char.multiplier = 1; break;
+                                case 'Defense (OtR)': char.multiplier = 4; break;
+                                case 'Defense (R)': char.multiplier = 5; break;
+                                case 'Speed': char.multiplier = 10; break;
+                                case 'Dexterity': char.multiplier = 10; break;
+                                case 'Intelligence': char.multiplier = 10; break;
+                                case 'Ego': char.multiplier = 10; break;
+                                default: char.multiplier = 1;
+                            }
+                        }
+                    });
+                }
+                
+                // Ensure other arrays exist
+                if (!characterData.optionalCharacteristics) characterData.optionalCharacteristics = [];
+                if (!characterData.situations) characterData.situations = [];
+                if (!characterData.powers) characterData.powers = [];
+                if (!characterData.skills) characterData.skills = [];
+                
+                // Update UI elements
+                document.getElementById('characterName').value = characterData.characterName || '';
+                document.getElementById('characterTypeToggle').checked = isVillain;
+                document.getElementById('experiencePoints').value = characterData.experiencePoints || 0;
+                
+                // Update character type display
+                updateCharacterType();
+                
+                // Re-render all sections with the loaded data
+                renderCharacteristics();
+                renderFiguredCharacteristics();
+                renderOptionalCharacteristics();
+                renderSituations();
+                renderPowers();
+                renderSkills();
+                
+                alert('Character "' + (characterData.characterName || 'Unnamed') + '" loaded successfully!');
+                
+            } catch (error) {
+                console.log('Full error:', error);
+                alert('Error loading character data: ' + error.message);
+            }
+        };
+        reader.readAsText(file);
+    }
+}
+
+        // Initialize app
+        function initializeApp() {
+            renderCharacteristics();
+            renderFiguredCharacteristics();
+            renderOptionalCharacteristics();
+            renderSituations();
+            renderPowers();
+            renderSkills();
+            // Don't call updateSummary() during initialization
+        }
+function checkForSavedData() {
+    // Find all saved characters
+    const savedCharacters = [];
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('heroesUnbound_')) {
+            const data = JSON.parse(localStorage.getItem(key));
+            savedCharacters.push({
+                key: key,
+                name: key.replace('heroesUnbound_', ''),
+                data: data
+            });
+        }
+    }
+    
+    if (savedCharacters.length > 0) {
+        let message = 'Found saved characters:\n\n';
+        savedCharacters.forEach((char, index) => {
+            message += (index + 1) + '. ' + char.name + ' (saved: ' + char.data.savedAt + ')\n';
+        });
+        message += '\nEnter the number of the character to load (or click Cancel):';
+        
+        const choice = prompt(message);
+        if (choice && choice > 0 && choice <= savedCharacters.length) {
+            const selectedChar = savedCharacters[choice - 1];
+            
+            characterData = selectedChar.data.characterData;
+            isVillain = selectedChar.data.isVillain;
+            
+            // Update UI
+            document.getElementById('characterName').value = characterData.characterName || '';
+            document.getElementById('characterTypeToggle').checked = isVillain;
+            document.getElementById('experiencePoints').value = characterData.experiencePoints || 0;
+            
+            // Re-render everything
+            updateCharacterType();
+            renderCharacteristics();
+            renderFiguredCharacteristics();
+            renderOptionalCharacteristics();
+            renderSituations();
+            renderPowers();
+            renderSkills();
+            
+            alert('Character "' + selectedChar.name + '" loaded successfully!');
+        }
+    }
+}
+
+        // Start the app
+        initializeApp();
+function exportWorkingSheet() {
+    const charName = characterData.characterName || 'Unnamed_Character';
+    const timestamp = new Date().toLocaleString();
+    
+    // Create a unique key for this save
+    const saveKey = prompt('Enter a name for this character save:', charName + '_' + new Date().toISOString().slice(0,10));
+    
+    if (saveKey) {
+        // Save to localStorage with the custom key
+        localStorage.setItem('heroesUnbound_' + saveKey, JSON.stringify({
+            characterData: characterData,
+            isVillain: isVillain,
+            savedAt: timestamp
+        }));
+        
+        alert('Character "' + saveKey + '" saved successfully!');
+    }
+}
+function downloadAllSaves() {
+    // Collect all saved characters
+    const allSaves = {};
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('heroesUnbound_')) {
+            allSaves[key] = JSON.parse(localStorage.getItem(key));
+        }
+    }
+    
+    if (Object.keys(allSaves).length === 0) {
+        alert('No saved characters found!');
+        return;
+    }
+    
+    // Create and download the backup file
+    const jsonData = JSON.stringify(allSaves, null, 2);
+    const blob = new Blob([jsonData], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'heroes_unbound_backup_' + new Date().toISOString().slice(0,10) + '.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    alert('All character saves downloaded as backup file!');
+}
+function loadFromBackup() {
+    // Create a hidden file input
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.style.display = 'none';
+    
+    input.onchange = function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const backupData = JSON.parse(e.target.result);
+                    let restoredCount = 0;
+                    
+                    // Restore each saved character
+                    for (const key in backupData) {
+                        if (key.startsWith('heroesUnbound_')) {
+                            localStorage.setItem(key, JSON.stringify(backupData[key]));
+                            restoredCount++;
+                        }
+                    }
+                    
+                    if (restoredCount > 0) {
+                        alert('Successfully restored ' + restoredCount + ' character saves! Refresh the page to see them.');
+                    } else {
+                        alert('No valid character saves found in backup file.');
+                    }
+                } catch (error) {
+                    alert('Error reading backup file: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+        
+        // Clean up
+        document.body.removeChild(input);
+    };
+    
+    // Trigger file selection
+    document.body.appendChild(input);
+    input.click();
+}
+function exportHeroSheet() {
+    const charName = characterData.characterName || 'Unnamed Character';
+    
+    let exportText = `HEROES UNBOUND - HERO SHEET\n`;
+    exportText += `${'='.repeat(40)}\n\n`;
+    exportText += `HERO: ${charName}\n`;
+    exportText += `TYPE: ${isVillain ? 'Villain' : 'Hero'}\n\n`;
+
+    // Helper function to get all bonus notes for a characteristic
+    const getAllBonusNotes = (charName) => {
+        const char = characterData.characteristics.find(c => c.name === charName);
+        const notes = [];
+        
+        // Add "From Powers" bonus if any
+        if (char.fromPowers > 0) {
+            if (charName === 'Strength' || charName === 'Presence') {
+                notes.push(`+${char.fromPowers}d6 From Powers`);
+            } else {
+                notes.push(`+${char.fromPowers} From Powers`);
+            }
+        }
+        
+        // Add ALL modified characteristic bonuses (both applied and unapplied)
+        const modifiedChars = characterData.optionalCharacteristics
+            .filter(optChar => optChar.characteristicType === charName);
+        
+        modifiedChars.forEach(optChar => {
+            if (optChar.pointAllocation > 0) {
+                let bonusText;
+                if (charName === 'Strength' || charName === 'Presence') {
+                    bonusText = `+${optChar.pointAllocation}d6`;
+                } else {
+                    bonusText = `+${optChar.pointAllocation}`;
+                }
+                
+                // Build description with advantages and limitations
+                let description = optChar.notes && optChar.notes.trim() ? 
+                    optChar.notes.trim() : 'Modified';
+                
+                // Add advantages and limitations
+                const modifiers = [];
+                if (optChar.advantages && optChar.advantages.length > 0) {
+                    modifiers.push(...optChar.advantages.map(adv => adv.name));
+                }
+                if (optChar.limitations && optChar.limitations.length > 0) {
+                    modifiers.push(...optChar.limitations.map(lim => lim.name));
+                }
+                
+                if (modifiers.length > 0) {
+                    description += `: ${modifiers.join(', ')}`;
+                }
+                
+                notes.push(`${bonusText} ${description}`);
+            }
+        });
+        
+        return notes.length > 0 ? ` (${notes.join(', ')})` : '';
+    };
+
+    // Helper function to get stunned bonus notes
+    const getStunnedBonusNotes = () => {
+        const notes = [];
+        if (characterData.stunnedFromPowers && characterData.stunnedFromPowers > 0) {
+            notes.push(`+${characterData.stunnedFromPowers} From Powers`);
+        }
+        return notes.length > 0 ? ` (${notes.join(', ')})` : '';
+    };
+
+    // Helper function to pad characteristic names consistently
+    const padCharName = (name, targetLength = 16) => {
+        return name.padEnd(targetLength);
+    };
+
+    // Situations
+    if (characterData.situations.length > 0) {
+        exportText += `SITUATIONS:\n`;
+        exportText += `${'-'.repeat(30)}\n`;
+        characterData.situations.forEach(situation => {
+            exportText += `${situation.name}: ${situation.notes || 'No details'}\n\n`;
+        });
+    }
+
+    // Get characteristic references
+    const bodyChar = characterData.characteristics.find(c => c.name === 'Body');
+    const defOChar = characterData.characteristics.find(c => c.name === 'Defense (O)');
+    const defOtRChar = characterData.characteristics.find(c => c.name === 'Defense (OtR)');
+    const defRChar = characterData.characteristics.find(c => c.name === 'Defense (R)');
+    const speedChar = characterData.characteristics.find(c => c.name === 'Speed');
+    const dexChar = characterData.characteristics.find(c => c.name === 'Dexterity');
+    const intChar = characterData.characteristics.find(c => c.name === 'Intelligence');
+    const egoChar = characterData.characteristics.find(c => c.name === 'Ego');
+    const strChar = characterData.characteristics.find(c => c.name === 'Strength');
+    const preChar = characterData.characteristics.find(c => c.name === 'Presence');
+
+    // Calculate main characteristic values (Base + Points + Applied Modified)
+    const getMainCharValue = (charName) => {
+        const char = characterData.characteristics.find(c => c.name === charName);
+        const appliedModifiedBonus = characterData.optionalCharacteristics
+            .filter(optChar => optChar.characteristicType === charName && optChar.applied)
+            .reduce((sum, optChar) => sum + optChar.pointAllocation, 0);
+        
+        return char.base + char.pointAllocation + appliedModifiedBonus;
+    };
+
+    // Calculate figured characteristic values
+    const bodyMainValue = getMainCharValue('Body');
+    const bodyTotalValue = bodyMainValue + bodyChar.fromPowers;
+    const defOTotalValue = defOChar.base + defOChar.fromPowers + defOChar.pointAllocation;
+    const defOtRTotalValue = defOtRChar ? defOtRChar.pointAllocation : 0;
+    const defRTotalValue = defRChar.base + defRChar.fromPowers + defRChar.pointAllocation;
+
+    const stunnedValue = bodyMainValue; // Base stunned without From Powers bonus
+    const recoveryValue = bodyTotalValue;
+    const knockoutValue = bodyTotalValue * 2;
+    const enduranceValue = bodyTotalValue * 3;
+    const defenseTotal = defOTotalValue + defRTotalValue;
+
+    // Characteristics in hero sheet order
+    exportText += `CHARACTERISTICS:\n`;
+    exportText += `${'-'.repeat(30)}\n`;
+
+    // Primary characteristics with d6 notation
+    const strMainValue = getMainCharValue('Strength');
+    exportText += `${padCharName('Strength')}${strMainValue}d6${getAllBonusNotes('Strength')}\n`;
+
+    const preMainValue = getMainCharValue('Presence');
+    exportText += `${padCharName('Presence')}${preMainValue}d6${getAllBonusNotes('Presence')}\n`;
+    exportText += `${'-'.repeat(30)}\n`; // Dashed line after Presence
+
+    // Body and figured characteristics
+    exportText += `${padCharName('Body')}${bodyMainValue}${getAllBonusNotes('Body')}\n`;
+    exportText += `${padCharName('Stunned')}${stunnedValue}${getStunnedBonusNotes()}\n`;
+    exportText += `${padCharName('Recovery')}${recoveryValue}\n`;
+    exportText += `${padCharName('Knockout')}${knockoutValue}\n`;
+    exportText += `${padCharName('Endurance')}${enduranceValue}\n`;
+    exportText += `${'-'.repeat(30)}\n`; // Dashed line after Endurance
+
+    // Defense
+    const defOMainValue = getMainCharValue('Defense (O)');
+    exportText += `${padCharName('Defense (O)')}${defOMainValue}${getAllBonusNotes('Defense (O)')}\n`;
+    
+    const defRMainValue = getMainCharValue('Defense (R)');
+    exportText += `${padCharName('Defense (R)')}${defRMainValue}${getAllBonusNotes('Defense (R)')}\n`;
+    
+    exportText += `${padCharName('Defense (Total)')}${defenseTotal}\n`;
+    exportText += `${'-'.repeat(30)}\n`; // Dashed line after Defense Total
+
+    // Speed
+    const speedMainValue = getMainCharValue('Speed');
+    exportText += `${padCharName('Speed')}${speedMainValue}${getAllBonusNotes('Speed')}\n`;
+    exportText += `${'-'.repeat(30)}\n`; // Dashed line after Speed
+
+    // Remaining characteristics
+    const dexMainValue = getMainCharValue('Dexterity');
+    exportText += `${padCharName('Dexterity')}${dexMainValue}${getAllBonusNotes('Dexterity')}\n`;
+
+    const intMainValue = getMainCharValue('Intelligence');
+    exportText += `${padCharName('Intelligence')}${intMainValue}${getAllBonusNotes('Intelligence')}\n`;
+
+    const egoMainValue = getMainCharValue('Ego');
+    exportText += `${padCharName('Ego')}${egoMainValue}${getAllBonusNotes('Ego')}\n\n`;
+
+    // Powers
+    if (characterData.powers.length > 0) {
+        exportText += `POWERS:\n`;
+        exportText += `${'-'.repeat(30)}\n`;
+        characterData.powers.forEach(power => {
+            exportText += `${power.name || 'Unnamed Power'}\n`;
+            if (power.components && power.components.length > 0) {
+                power.components.forEach(comp => {
+                    const endCost = Math.ceil(comp.activePoints / 10);
+                    exportText += `  ${comp.name} (END: ${endCost})\n`;
+                    
+                    // Add limitations/advantages as notes
+                    if (comp.limitations.length > 0 || comp.advantages.length > 0) {
+                        const notes = [...comp.limitations, ...comp.advantages].map(mod => mod.name).join('; ');
+                        exportText += `    Notes: ${notes}\n`;
+                    }
+                });
+            }
+            exportText += `\n`;
+        });
+    }
+
+    // Skills
+    if (characterData.skills.length > 0) {
+        exportText += `SKILLS:\n`;
+        exportText += `${'-'.repeat(30)}\n`;
+        characterData.skills.forEach(skill => {
+            exportText += `${skill.name || 'Unnamed Skill'}\n`;
+        });
+        exportText += `\n`;
+    }
+
+    // Create and download file
+    const blob = new Blob([exportText], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${charName.replace(/[^a-z0-9]/gi, '_')}_hero_sheet.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
