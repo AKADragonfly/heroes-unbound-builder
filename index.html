@@ -3035,7 +3035,9 @@ if (characterData.optionalCharacteristics.length > 0) {
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${(characterData.characterName || 'character').replace(/[^a-z0-9]/gi, '_')}_data.json`;
+            const cleanName = (characterData.characterName || 'Character').replace(/[^a-z0-9]/gi, '_');
+            const date = new Date().toISOString().slice(0,10);
+            a.download = `${cleanName}_${date}_data.json`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
